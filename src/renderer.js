@@ -27,3 +27,21 @@
  */
 
 import './index.css';
+import Rotas from './Renderer_front/Services/Rotas'
+
+console.log('passou aqui')
+
+const rota_mapeada = new Rotas()
+
+async function navegarPara(rota){
+    const html = await rota_mapeada.getPage(rota)
+    document.querySelector('#app').innerHTML = html
+    console.log(document.getElementById('app'))
+}
+
+window.addEventListener('hashchange', async () => {
+    const rota = window.location.hash.replace('#', '/')
+    await navegarPara(rota)
+})
+
+navegarPara('/produto_menu')

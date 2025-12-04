@@ -1,13 +1,16 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { initDatabase } from './Main_back/Database/db.js';
-
+import ProdutosController from './Main_back/Controllers/ProdutosController.js'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
 }
+
+const controllerProdutos = new ProdutosController()
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -16,6 +19,8 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true
     },
   });
 
@@ -34,9 +39,10 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  
   createWindow();
   initDatabase();
-
+  
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   app.on('activate', () => {
@@ -44,6 +50,13 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
+
+  ipcMain.handle('produtos:listar', async () => {
+    return await controllerProdutos.listar()
+  })
+
+
+
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
