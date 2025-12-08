@@ -9,7 +9,7 @@ export function initDatabase() {
   db.pragma('journal_mode = WAL');
 
   db.exec(`
-    CREATE TABLE IF NOT EXISTS usuarios (
+    CREATE TABLE IF NOT EXISTS produtos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       produto TEXT NOT NULL
     );

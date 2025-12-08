@@ -14,8 +14,9 @@ class ProdutosView{
         <tr>
             <th>Produtos</th>
         </tr>`
+        console.log(produtos)
         produtos.forEach(produto => {
-            container += `<tr><td> ${produto.nome} </td></tr>`           
+            container += `<tr><td> ${produto.produto} </td></tr>`           
         });
 
         container += `</table></div>`
