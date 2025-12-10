@@ -14,6 +14,7 @@ export function initDatabase() {
       uuid TEXT, 
       nome_usuario TEXT NOT NULL,
       email_usuario TEXT NOT NULL,
+      telefone_usuario TEXT,
       tipo_usuario TEXT NOT NULL,
       sync_status INTEGER DEFAULT 0, -- 0 = Pendente, 1 = Sincronizado
       criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
