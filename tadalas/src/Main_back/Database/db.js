@@ -10,7 +10,7 @@ export function initDatabase() {
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS usuarios (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      usuario_id INTEGER PRIMARY KEY AUTOINCREMENT,
       uuid TEXT, 
       nome_usuario TEXT NOT NULL,
       email_usuario TEXT NOT NULL,
@@ -21,7 +21,17 @@ export function initDatabase() {
       atualizado_em DATETIME,
       excluido_em DATETIME -- Se estiver preenchido, o registro foi "deletado"
     );
-  `);
+    CREATE TABLE IF NOT EXISTS produtos (
+    produto_id INTERGER PRIMARY KEY AUTOINCREMENT,
+    uuid TEXT NOT NULL,
+    produto_nome TEXT NOT NULL,
+    produto_descricao TEXT NOT NULL,     
+    produto_preco NUMERIC NOT NULL,
+    
+    )
+  
+  
+    `);
   
   console.log('Banco de dados inicializado em:', dbPath);
 }
