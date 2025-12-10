@@ -11,13 +11,25 @@ class UsuarioController{
     async sincronizarAPIlocal(usuarios){
 
         usuarios.forEach(usuario => {
-        if(this.usuarioModel.buscarPorEmail(usuarios.email_usuario)){
-            if(!this.usuarioModel.adicionar(usuario)){
+        if(!this.usuarioModel.buscarPorEmail(usuarios.email_usuario)){
+            if(this.usuarioModel.adicionar(usuario)){
                 console.log(`usuario: ${usuarios.email_usuario}`)
             }
         }
     });
 } 
+   async sincAllAPIslocal(datas){
+
+        datas.usuario.forEach(usuario => {
+        if(!this.usuarioModel.buscarPorEmail(datas.usuario.email_usuario)){
+            if(this.usuarioModel.adicionar(usuario)){
+                console.log(`Usuario adicionado ${usuario}`)
+            }
+        }
+        })
+        
+
+   }
     
 
     async cadastrar(usuario){

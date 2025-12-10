@@ -2,14 +2,12 @@ import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import UsuarioController from './Main_back/Controllers/UsuarioController.js';
-import ServicoController from './Main_back/Controllers/ServicoController.js';
 import { initDatabase } from './Main_back/Database/db.js';
-import APIFetch from './Renderer_front/Views/Servico/APIfetch.js';
+import APIFetch from './Main_back/Services/APIFetch.js';
 if (started) {
   app.quit();
 }
 const controlerUsuario = new UsuarioController();
-const controlerServico = new ServicoController();
 const apiremoto = new APIFetch
 
 const createWindow = () => {
@@ -45,15 +43,6 @@ initDatabase();
     }
   });
 
-ipcMain.handle('dark-mode:toggle', () => {
-  if (nativeTheme.shouldUseDarkColors) {
-    nativeTheme.themeSource = 'light'
-  } else {
-    nativeTheme.themeSource = 'dark'
-  }
-  return nativeTheme.shouldUseDarkColors
-})
-
 ipcMain.handle("usuarios:buscarPorId", async (event, uuid) => {
   return await controlerUsuario.buscarUsuarioPorId(uuid);
 })
@@ -75,13 +64,20 @@ ipcMain.handle("usuarios:editar", async (event, usuario) => {
    return resultado;
 })
 
-async function buscarUsuariosRemoto(){
-  const resultado = await apiremoto.fetch("usuarios")
-  await controlerUsuario.sincronizarAPIlocal(resultado.data.data)
+// async function buscarUsuariosRemoto(){
+//   const resultado = await apiremoto.fetchU("usuarios")
+//   await controlerUsuario.sincronizarAPIlocal(resultado.data.data)
+// }
+// return buscarUsuariosRemoto();
+ 
+async function sincALLdata(){
+  const resultado = await apiremoto.fetchALL("datas")
+  await controlerUsuario.sincAllAPIslocal(resultado.data.data)
 }
-return buscarUsuariosRemoto()
+return sincALLdata();
 
 });
+
 
 
 

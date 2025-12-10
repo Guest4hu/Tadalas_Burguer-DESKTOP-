@@ -1,4 +1,4 @@
-import db from "../Databases/db";
+import db from "../Database/db";
 class Usuarios {
     constructor(){
 
