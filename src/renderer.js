@@ -29,7 +29,6 @@
 import './index.css';
 import Rotas from './Renderer_front/Services/Rotas'
 
-console.log('passou aqui')
 
 const rota_mapeada = new Rotas()
 

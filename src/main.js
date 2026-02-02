@@ -2,14 +2,21 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { initDatabase } from './Main_back/Database/db.js';
+
+
+// Importação dos Controller
 import ProdutosController from './Main_back/Controllers/ProdutosController.js'
+import UsuariosController from './Main_back/Controllers/UsuariosController.js'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
 }
 
+
+// Pxando as variáveis do Controller
 const controllerProdutos = new ProdutosController()
+const controllerUsuarios = new UsuariosController()
 
 
 const createWindow = () => {
@@ -55,8 +62,10 @@ app.whenReady().then(() => {
     return await controllerProdutos.listar()
   })
 
-
-
+  ipcMain.handle('usuarios:listarTodosUsuarios', async () => {
+    return await controllerUsuarios.listarTodosUsuarios()
+  })
+  
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

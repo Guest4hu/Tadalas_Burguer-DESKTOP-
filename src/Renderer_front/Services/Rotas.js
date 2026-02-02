@@ -9,6 +9,9 @@ class Rotas {
             },
             '/produto_listar': async () => {
                 return new ProdutosListar().renderizarLista()
+            },
+            '/usuario_menu': () => {
+
             }
         }
     }
