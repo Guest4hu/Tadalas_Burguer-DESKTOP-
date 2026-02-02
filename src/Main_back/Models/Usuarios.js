@@ -7,7 +7,7 @@ class Usuarios
     }
 
     listarTodosUsuarios() {
-        const stmt = db.prepare('SELECT * FROM usuarios')
+        const stmt = db.prepare('SELECT * FROM tbl_usuarios')
         return stmt.all()
     }
 }
