@@ -10,7 +10,7 @@ import UsuarioModel from '../Models/Usuarios.js';
 export default class APIFetch {
   constructor(){
     this.chave = '5d242b5294d72df332ca2c492d2c0b9b'
-    this.urlBase = `http://localhost:8000/backend/`
+    this.urlBase = `http://localhost:8000/backend/desktop/api`
     this.categoriaModel = new CategoriaModel();
     this.enderecoModel = new EnderecoModel();
     this.itemPedidoModel = new ItemPedidoModel();
@@ -20,8 +20,9 @@ export default class APIFetch {
     this.usuarioModel = new UsuarioModel();
   }
   
-  async sincronizarDados(url, controller) {
+  async sincronizarDados(controller) {
     if (!net.isOnline()) {
+      console.log('[Sync] Sem internet. Abortando.');
       return {sucess: false, message: 'Sem conexão com a internet'};
     }
     
@@ -36,29 +37,44 @@ export default class APIFetch {
         }
       };
 
-      const response = await fetch(`${this.urlBase}${controller}/api/${url}`, config);
+       console.log('[Sync] Enviando...');
+      const response = await fetch(`${this.urlBase}/${controller}`, config);
   
       if (!response.ok) throw new Error(`Erro ao sincronizar dados`)
   
         const data = await response.json();
+        console.log('[Sync] Resposta recebida:', data.data);
         return {sucess: true, dados: data};
 
       
     } catch (error) {
+      console.error('[Sync] Erro:', error);
       return {sucess: false, message: error.message};
     }
   }
 
-  async enviarDadosLocais(controller, url) {
+  async enviarDadosLocais(controller) {
     if (!net.isOnline()) {
+       console.log('[Sync Upload] Sem internet. Tentaremos depois.');
       return {sucess: false, message: 'Sem conexão com a internet'};
     }
 
   const dadosLocaisPendentes = await this.buscarDadosLocais();
 
+  console.log(dadosLocaisPendentes);
+
+    if (dadosLocaisPendentes.length === 0) {
+      console.log('[Sync Upload] Nada para enviar.');
+      return;
+    }
+
+  console.log(`[Sync Upload] Enviando ${dadosLocaisPendentes.length} registros...`);    
+    
+
+
  for (const element of dadosLocaisPendentes) {
       try{
-         const response = await fetch(`${this.urlBase}${controller}/api/${url}`, {
+         const response = await fetch(`${this.urlBase}/${controller}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,19 +84,21 @@ export default class APIFetch {
         });
 
         if (!response.ok) {
-            continue; 
+          const erro = await response.json();
+          console.error(`[Sync Upload] Erro ao enviar ${element}:`, erro);
+          continue; 
         }
 
         const jsonResponse = await response.json();
         if (jsonResponse.status === 'success') {
+           console.log(`[Sync Upload] Sucesso: ${element} sincronizado.`);
+           this.element.marcarComoSincronizado(element.uuid);
         }
       } catch (error) {
-          console.error(`[Sync Upload] Exceção ao processar elemento:`, error);
+          console.error(`[Sync Upload] Exceção ao processar elemento: ${element}`, error);
       }
   }
 }
-
-
   async buscarDadosLocais(){
     const fontes = {
   categorias: this.categoriaModel.listarPendentes(),
@@ -98,4 +116,6 @@ const dados = Object.fromEntries(
   
 return dados;
 }
+
+
 }

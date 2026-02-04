@@ -1,0 +1,13 @@
+
+/* Importações de fontes e bibliotecas CSS externas */
+@import url( "https://www.w3schools.com/w3css/4/w3.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url("https://fonts.googleapis.com");
+@import url("https://fonts.gstatic.com");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+
+
+
+/* Importação de estilos específicos de páginas */
+@import url("paginaLogin/login.css");

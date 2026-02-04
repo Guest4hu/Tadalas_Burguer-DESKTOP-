@@ -43,4 +43,4 @@ window.addEventListener('hashchange', async () => {
     await navegarPara(rota)
 })
 
-navegarPara('/produto_menu')
+navegarPara('/renderizar_login')

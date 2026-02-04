@@ -1,7 +1,7 @@
 import Usuarios from '../Models/Usuarios.js'
 
 
-class UsuariosController {
+export default class UsuariosController {
     constructor() {
         this.usuarioModel = new Usuarios()
     }

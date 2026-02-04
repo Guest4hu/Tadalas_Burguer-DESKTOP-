@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { initDatabase } from './Main_back/Database/db.js';
+import APIFetch from './Main_back/Services/APIFetch.js';
 
 
 // Importação dos Controller
@@ -22,8 +23,8 @@ const controllerUsuarios = new UsuariosController()
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: "100%",
+    height: "100%",
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -57,14 +58,6 @@ app.whenReady().then(() => {
       createWindow();
     }
   });
-
-  ipcMain.handle('produtos:listar', async () => {
-    return await controllerProdutos.listar()
-  })
-
-  ipcMain.handle('usuarios:listarTodosUsuarios', async () => {
-    return await controllerUsuarios.listarTodosUsuarios()
-  })
   
 });
 

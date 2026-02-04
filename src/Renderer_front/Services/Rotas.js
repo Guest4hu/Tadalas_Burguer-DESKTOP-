@@ -1,17 +1,15 @@
 import ProdutosView from "../Views/Produto/ProdutosView";
 import ProdutosListar from "../Views/Produto/listar/ProdutosListar"
+import Login from "../Views/Login.js";
 
 class Rotas {
     constructor(){
         this.rotas = {
-            '/produto_menu': () => {
-                return new ProdutosView().renderizarMenu()
+            "/renderizar_login": () => {
+                return new Login().renderizarLogin()
             },
-            '/produto_listar': async () => {
-                return new ProdutosListar().renderizarLista()
-            },
-            '/usuario_menu': () => {
-
+            "/registrarConta": () => {
+                return new Login().modalRegistrarConta()
             }
         }
     }
