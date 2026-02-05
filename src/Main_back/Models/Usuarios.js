@@ -47,6 +47,13 @@ class Usuarios {
     `).get(uuid);
   }
 
+  buscarPorEmail(email) {
+    return db.prepare(`
+      SELECT * FROM tbl_usuarios 
+      WHERE email = ? AND excluido_em IS NULL
+    `).get(email);
+  }
+
   atualizar(usuario) {
     return db.prepare(`
       UPDATE tbl_usuarios SET

@@ -5,8 +5,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
-    'electronAPI', {
-        fazerLogin: (dados) => ipcRenderer.invoke('fazer-login', dados)
-        
+    'ElectronAPI', {
+        fazerLogin: (dados) => ipcRenderer.invoke('fazer-login', dados),
+        enviarCodigoRecuperacao: (email) => ipcRenderer.invoke('enviar-codigo-recuperacao', email),
     },
 )

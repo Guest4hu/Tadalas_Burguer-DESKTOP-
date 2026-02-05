@@ -1,7 +1,8 @@
 import ProdutosView from "../Views/Produto/ProdutosView";
 import ProdutosListar from "../Views/Produto/listar/ProdutosListar"
-import Login from "../Views/Login.js";
+import Login from "../Views/Login/Login.js";
 import PDV from "../Views/PDV/PDV.js";
+import EsqueciSenha from "../Views/Login/Botoes/EsqueciSenha.js";
 
 class Rotas {
     constructor(){
@@ -11,6 +12,9 @@ class Rotas {
             },
             "/PDV": () => {
                 return new PDV()
+            },
+            "/EsqueciSenha": () => {
+                return new EsqueciSenha()
             }
         }
     }

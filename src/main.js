@@ -8,6 +8,7 @@ import APIFetch from './Main_back/Services/APIFetch.js';
 // Importação dos Controller
 import ProdutosController from './Main_back/Controllers/ProdutosController.js'
 import UsuariosController from './Main_back/Controllers/UsuariosController.js'
+import LoginController from './Main_back/Controllers/LoginController.js'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -18,6 +19,7 @@ if (started) {
 // Pxando as variáveis do Controller
 const controllerProdutos = new ProdutosController()
 const controllerUsuarios = new UsuariosController()
+const controllerLogin = new LoginController()
 
 
 const createWindow = () => {
@@ -52,7 +54,12 @@ app.whenReady().then(() => {
   initDatabase();
 
   ipcMain.handle('fazer-login', async (event, dados) => {
-    const resultado = await controllerUsuarios.validarCredenciais(dados.email, dados.senha);
+    const resultado = await controllerLogin.validarCredenciais(dados.email, dados.senha);
+    return resultado;
+  });
+
+  ipcMain.handle('enviar-codigo-recuperacao', async (event, email) => {
+    const resultado = await controllerLogin.enviarCodigoRecuperacao(email);
     return resultado;
   });
 

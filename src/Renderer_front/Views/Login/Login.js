@@ -1,5 +1,8 @@
+import Notificacao from "../../Services/Notificacao.js";
+
 export default class Login {
     constructor(){
+        this.notificacao = new Notificacao()
 
     }
 
@@ -88,9 +91,10 @@ export default class Login {
                 </form>
                 
                 <div class="links-container">
-                    <a href="/backend/esqueci-senha">Esqueci a senha</a>
+                    <a href="#EsqueciSenha">Esqueci a senha</a>
                 </div>
             </div>
+        </div>
         </div>`
     }
 
@@ -101,38 +105,21 @@ export default class Login {
                 email: email,
                 senha: senha
             };
-            window.location.href = (`#PDV`);
-
-
-
             
-        //     try {
-        //         resultado = window.electronAPI.fazerLogin(dados);
-        //         if (resultado.sucesso) {
-        //             window.location.href = resultado.redirecionarPara;
-        //         } else {
-        //             alert('Falha no login: ' + resultado.mensagem);
-        //         }
+             try {
+                 resultado = window.ElectronAPI.fazerLogin(dados);
+                 if (resultado.sucesso) {
+                     window.location.href = resultado.redirecionarPara;
+                        window.location.href = (`#PDV`);
+                 } else {                     
+                     this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
+                 }
 
-        //     } catch (error) {
-        //         console.error('Erro ao fazer login:', error);
-        //         alert('Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
-        //     }
+             } catch (error) {
+                 this.notificacao.notificacaoMensagem('error', 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
+             }
         }
    
-    botaoEsqueciSenha(){
-
-
-    }
-
-    botaoCriarConta(){
-
-
-    }
-
-
-
-
     async ativarEventos(){
 
         // função para o botão de enviar o formulário de login
@@ -140,5 +127,6 @@ export default class Login {
             e.preventDefault();
             this.validarCredenciais();
         });
+
     }
 }
