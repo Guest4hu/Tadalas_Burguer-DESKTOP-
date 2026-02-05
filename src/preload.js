@@ -5,7 +5,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
-    'api', {
+    'electronAPI', {
+        fazerLogin: (dados) => ipcRenderer.invoke('fazer-login', dados)
         
     },
 )

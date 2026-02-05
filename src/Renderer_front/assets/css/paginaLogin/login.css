@@ -359,7 +359,7 @@
             animation: fadeIn 0.3s ease-out;
         }
         
-        .modal-overlay.active {
+       .modal-overlay.active {
             display: flex;
             align-items: center;
             justify-content: center;

@@ -2,8 +2,10 @@ export default class Login {
     constructor(){
 
     }
-    renderizarLogin(){
-        return ` <div class="window-chrome">
+
+
+    async renderizar(){
+         return `<div class="window-chrome">
         <div class="window-controls">
             <div class="window-btn close"></div>
             <div class="window-btn minimize"></div>
@@ -58,31 +60,25 @@ export default class Login {
         <!-- Main Content -->
         <div class="auth-main">
             <div class="auth-card">
-                <!-- Success/Error Messages -->
-                <div class="success-message" id="successMessage">
-                    Ação realizada com sucesso!
-                </div>
-                <div class="error-message" id="errorMessage">
-                    Ocorreu um erro. Tente novamente.
-                </div>
+               
+                
                 
                 <!-- Login Form -->
                 <h1>Bem-vindo de volta</h1>
                 <p class="auth-subtle">Entre com suas credenciais para acessar sua conta e fazer seu pedido no Tadala Burger.</p>
                 
-                <form action="/backend/login" method="POST">
-                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect ?? '/carrinho.php', ENT_QUOTES, 'UTF-8'); ?>">
+                <form id="loginForm">
                     
                     <div class="input-group has-label">
                         <label class="input-label">Email</label>
                         <i class="fa fa-envelope-o input-icon"></i>
-                        <input class="w3-input" name="email" type="email" placeholder="seu@email.com" required>
+                        <input class="w3-input" id="email" name="email" type="email" placeholder="seu@email.com" >
                     </div>
                     
                     <div class="input-group has-label">
                         <label class="input-label">Senha</label>
                         <i class="fa fa-lock input-icon"></i>
-                        <input class="w3-input" name="senha" type="password" placeholder="••••••••" required>
+                        <input class="w3-input" name="senha" type="password" placeholder="••••••••" >
                     </div>
                     
                     <button type="submit" class="w3-button" style="width:100%;">
@@ -94,85 +90,36 @@ export default class Login {
                 <div class="links-container">
                     <a href="/backend/esqueci-senha">Esqueci a senha</a>
                 </div>
-                
-                <!-- Divider -->
-                <div class="divider">
-                    <span class="divider-text">ou</span>
-                </div>
-                
-                <!-- Register Button -->
-                <a href="#registrarConta" class="w3-button btn-secondary" style="width: 100%;">
-                    <i class="fa fa-user-plus" style="margin-right: 8px;"></i>
-                    Criar Nova Conta
-                </a>
             </div>
-        </div>
-    </div>
-    <!-- Register Modal -->
-    <div class="modal-overlay" id="registerModal" onclick="closeRegisterModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-close" onclick="closeRegisterModal()">
-                <i class="fa fa-times"></i>
-            </div>
+        </div>`
+    }
+
+    async validarCredenciais(){
+        const email = document.getElementById('email').value;
+            const senha = document.querySelector('input[name="senha"]').value;
+            const dados = {
+                email: email,
+                senha: senha
+            };
+            window.location.href = (`#PDV`);
+
+
+
             
-            <div class="modal-header">
-                <h2>Criar Nova Conta</h2>
-                <p class="auth-subtle" style="margin-bottom: 0;">Cadastre-se agora e aproveite nossas delícias e promoções exclusivas!</p>
-            </div>
-            
-            <form action="/backend/register" method="POST" id="registerForm">
-                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect ?? '/carrinho.php', ENT_QUOTES, 'UTF-8'); ?>">
-                
-                <div class="input-group has-label">
-                    <label class="input-label">Email</label>
-                    <i class="fa fa-envelope-o input-icon"></i>
-                    <input class="w3-input" name="email" type="email" placeholder="seu@email.com" required>
-                </div>
-                
-                <div class="input-group has-label">
-                    <label class="input-label">Senha</label>
-                    <i class="fa fa-lock input-icon"></i>
-                    <input class="w3-input" name="senha" type="password" placeholder="••••••••" required>
-                </div>
-                
-                <button type="submit" class="w3-button w3-block">
-                    <i class="fa fa-user-plus" style="margin-right: 8px;"></i>
-                    Registrar
-                </button>
-            </form>
-            
-            <div style="margin-top: 20px; text-align: center; font-size: 14px; color: var(--muted);">
-                <p>Já tem uma conta? <a href="#" onclick="closeRegisterModal(); return false;">Faça o login</a>.</p>
-            </div>
-        </div>
-    </div>`
-    }
+        //     try {
+        //         resultado = window.electronAPI.fazerLogin(dados);
+        //         if (resultado.sucesso) {
+        //             window.location.href = resultado.redirecionarPara;
+        //         } else {
+        //             alert('Falha no login: ' + resultado.mensagem);
+        //         }
 
-    modalRegistrarConta(){
-        console.log("Estou ativando malandro")
-
-
-        document.getElementById('registerModal').classList.add('active');   
-    }
-
-
-
-
-
-
-    validarCredenciais(usuario, senha){
-
-    
-
-    }
-
-
-    fecharModal(){
-
-
-
-    }
-
+        //     } catch (error) {
+        //         console.error('Erro ao fazer login:', error);
+        //         alert('Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
+        //     }
+        }
+   
     botaoEsqueciSenha(){
 
 
@@ -183,4 +130,15 @@ export default class Login {
 
     }
 
+
+
+
+    async ativarEventos(){
+
+        // função para o botão de enviar o formulário de login
+        const botaoEnviar = document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            this.validarCredenciais();
+        });
+    }
 }

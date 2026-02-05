@@ -8,4 +8,7 @@ export default class UsuariosController {
     listarTodosUsuarios(){
         return this.usuarioModel.listarTodosUsuarios()
     }
+    validarCredenciais(email, senha){
+        return this.usuarioModel.validarCredenciais(email, senha)
+    }
 }

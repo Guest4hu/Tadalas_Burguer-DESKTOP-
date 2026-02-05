@@ -50,7 +50,12 @@ app.whenReady().then(() => {
   
   createWindow();
   initDatabase();
-  
+
+  ipcMain.handle('fazer-login', async (event, dados) => {
+    const resultado = await controllerUsuarios.validarCredenciais(dados.email, dados.senha);
+    return resultado;
+  });
+
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   app.on('activate', () => {

@@ -33,9 +33,11 @@ import Rotas from './Renderer_front/Services/Rotas'
 const rota_mapeada = new Rotas()
 
 async function navegarPara(rota){
-    const html = await rota_mapeada.getPage(rota)
-    document.querySelector('#app').innerHTML = html
-    console.log(document.getElementById('app'))
+    document.querySelector('#app').innerHTML = '<h1>Carregando...</h1>'
+    const componente = await rota_mapeada.getPage(rota)
+    const tela = await componente.renderizar()
+    document.querySelector('#app').innerHTML = tela
+    await componente.ativarEventos()
 }
 
 window.addEventListener('hashchange', async () => {
@@ -43,4 +45,4 @@ window.addEventListener('hashchange', async () => {
     await navegarPara(rota)
 })
 
-navegarPara('/renderizar_login')
+navegarPara('/Login')
