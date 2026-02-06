@@ -7,7 +7,7 @@ class Enderecos {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT INTO tbl_enderecos
+      INSERT OR IGNORE INTO tbl_enderecos
       (uuid, usuario_id, rua, numero, bairro, cidade, estado, cep, sincronizado_em)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
     `).run(

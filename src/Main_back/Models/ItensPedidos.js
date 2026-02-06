@@ -7,7 +7,7 @@ class ItensPedido {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT INTO tbl_itens_pedidos
+      INSERT OR IGNORE INTO tbl_itens_pedidos
       (uuid, pedido_id, produto_id, quantidade, valor_unitario, sincronizado_em)
       VALUES (?, ?, ?, ?, ?, 0)
     `).run(

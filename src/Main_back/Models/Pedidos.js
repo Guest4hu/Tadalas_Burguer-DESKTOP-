@@ -5,9 +5,8 @@ class Pedidos {
 
  async adicionar(pedido) {
     const uuid = crypto.randomUUID();
-
     return db.prepare(`
-      INSERT INTO tbl_pedidos
+     INSERT OR IGNORE INTO tbl_pedidos
       (uuid, usuario_id, status_pedido_id, tipo_pedido, sincronizado_em)
       VALUES (?, ?, ?, ?, 0)
     `).run(

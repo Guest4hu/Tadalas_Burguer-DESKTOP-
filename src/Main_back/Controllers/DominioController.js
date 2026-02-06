@@ -1,119 +1,68 @@
-import db from '../Database/db.js';
+import Dominio from '../Models/Dominio.js';
 
-class Dominio {
+class DominioController {
 
     constructor() {
-
-        this.tabelas = {
-            tipoUsuario: {
-                tabela: 'dom_tipo_usuario',
-                coluna: 'descricao'
-            },
-            tipoPedido: {
-                tabela: 'dom_tipo_pedido',
-                coluna: 'descricao_tipo'
-            },
-            statusPagamento: {
-                tabela: 'dom_status_pagamento',
-                coluna: 'descricao'
-            },
-            metodoPagamento: {
-                tabela: 'dom_metodo_pagamento',
-                coluna: 'descricao_metodo'
-            }
-        };
-
-    }
-
-    // 📌 Validar domínio
-    getConfig(tipo) {
-        return this.tabelas[tipo];
+        this.model = new Dominio();
     }
 
     // =============================
     // LISTAR
     // =============================
 
-    listar(tipo) {
-        const config = this.getConfig(tipo);
-        if (!config) return [];
-
-        const stmt = db.prepare(`
-            SELECT * FROM ${config.tabela}
-            ORDER BY id
-        `);
-
-        return stmt.all();
+    async listar(tipo) {
+        if (!tipo) return [];
+        return this.model.listar(tipo);
     }
 
     // =============================
-    // BUSCAR POR ID
+    // BUSCAR
     // =============================
 
-    buscarPorId(tipo, id) {
-        const config = this.getConfig(tipo);
-        if (!config) return null;
-
-        const stmt = db.prepare(`
-            SELECT * FROM ${config.tabela}
-            WHERE id = ?
-        `);
-
-        return stmt.get(id);
+    async buscarPorId(tipo, id) {
+        if (!tipo || !id) return false;
+        return this.model.buscarPorId(tipo, id);
     }
 
     // =============================
-    // ADICIONAR
+    // CADASTRAR
     // =============================
 
-    adicionar(tipo, descricao) {
-        const config = this.getConfig(tipo);
-        if (!config) return false;
-
-        const stmt = db.prepare(`
-            INSERT INTO ${config.tabela} (${config.coluna})
-            VALUES (?)
-        `);
-
-        const info = stmt.run(descricao);
-        return info.lastInsertRowid;
+    async cadastrarLocalmente(tipo, descricao) {
+        if (!tipo || !descricao) return false;
+        return this.model.adicionar(tipo, descricao);
     }
 
     // =============================
     // ATUALIZAR
     // =============================
 
-    atualizar(tipo, id, descricao) {
-        const config = this.getConfig(tipo);
-        if (!config) return false;
+    async atualizar(tipo, id, descricao) {
 
-        const stmt = db.prepare(`
-            UPDATE ${config.tabela}
-            SET ${config.coluna} = ?
-            WHERE id = ?
-        `);
+        if (!tipo || !id || !descricao)
+            return false;
 
-        const info = stmt.run(descricao, id);
-        return info.changes > 0;
+        const existe = this.model.buscarPorId(tipo, id);
+        if (!existe) return false;
+
+        return this.model.atualizar(tipo, id, descricao);
     }
 
     // =============================
     // REMOVER
     // =============================
 
-    remover(tipo, id) {
-        const config = this.getConfig(tipo);
-        if (!config) return false;
+    async remover(tipo, id) {
 
-        const stmt = db.prepare(`
-            DELETE FROM ${config.tabela}
-            WHERE id = ?
-        `);
+        if (!tipo || !id)
+            return false;
 
-        const info = stmt.run(id);
-        return info.changes > 0;
+        const existe = this.model.buscarPorId(tipo, id);
+        if (!existe) return false;
+
+        return this.model.remover(tipo, id);
     }
 
 }
 
-export default Dominio;
+export default DominioController;

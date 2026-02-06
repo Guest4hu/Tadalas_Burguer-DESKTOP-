@@ -7,7 +7,7 @@ async adicionar(pagamento) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT INTO tbl_pagamento
+      INSERT OR IGNORE INTO tbl_pagamento
       (uuid, pedido_id, metodo, status_pagamento_id, valor_total, sincronizado_em)
       VALUES (?, ?, ?, ?, ?, 0)
     `).run(

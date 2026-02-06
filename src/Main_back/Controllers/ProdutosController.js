@@ -11,7 +11,6 @@ class ProdutoController {
     }
 
     async cadastrarLocalmente(produto) {
-
         if (!produto.nome || !produto.preco || !produto.categoria_id)
             return false;
 

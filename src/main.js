@@ -92,106 +92,80 @@ async function sincronizarSeOnline() {
   const isOnline = net.isOnline();
   if (isOnline) {
     console.log('[Main] Aplicativo iniciado com internet. Iniciando sincronização automática...');
+   const dominioStatusPedido = await APIFetch.sincronizarDados('dominioStatusPedido');
   const dominioTipoUsuario = await APIFetch.sincronizarDados('dominioTipoUsuario');
-  const dominioTipoPedido = await APIFetch.sincronizarDados('dominioTipoPedido'); 
+  const dominioTipoPedido = await APIFetch.sincronizarDados('dominioTipoPedido');
   const dominioStatusPagamento = await APIFetch.sincronizarDados('dominioStatusPagamento');
   const dominioMetodoPagamento = await APIFetch.sincronizarDados('dominioMetodoPagamento');
   const categorias = await APIFetch.sincronizarDados('categorias');
   const produtos = await APIFetch.sincronizarDados('produtos');
   const usuarios = await APIFetch.sincronizarDados('usuarios');
   const enderecos = await APIFetch.sincronizarDados('enderecos');
-  const pedido = await APIFetch.sincronizarDados('pedidos');
-  const itensPedidos = await APIFetch.sincronizarDados('itensPedidos');
-  const pagamentos = await APIFetch.sincronizarDados('pagamentos');
+  const pedidos = await APIFetch.sincronizarDados('pedidos');
 
+  // ===== DOMINIOS =====
 
-
-
-
-dominioTipoUsuario.dados.forEach(async (item) => {
-    let resultado = await controllerDominio.cadastrar(
-        'tipoUsuario',
-        item.descricao
-    );
-    console.log('tipoUsuario', resultado);
-});
-
-dominioTipoPedido.dados.forEach(async (item) => {
-
-    let resultado = await controllerDominio.cadastrar(
-        'tipoPedido',
-        item.descricao_tipo
-    );
-
-    console.log('tipoPedido', resultado);
-});
-dominioStatusPagamento.dados.forEach(async (item) => {
-
-    let resultado = await controllerDominio.cadastrar(
-        'statusPagamento',
-        item.descricao
-    );
-
-    console.log('statusPagamento', resultado);
-});
-dominioMetodoPagamento.dados.forEach(async (item) => {
-
-    let resultado = await controllerDominio.cadastrar(
-        'metodoPagamento',
-        item.descricao_metodo
-    );
-
-    console.log('metodoPagamento', resultado);
-});
-
-
-
-  categorias.dados.forEach(async categoria => {
-      let resultado = await controllerCategorias.cadastrarLocalmente(categoria);
-      console.log(resultado);
-      
-  });
-  produtos.dados.forEach(async produto => {
-      let resultado = await controllerProdutos.cadastrarLocalmente(produto);
-      console.log(resultado);
-  });
-  usuarios.dados.forEach(async usuario => {
-      let resultado = await controllerUsuarios.cadastrarLocalmente(usuario);
-      console.log(resultado);
-  });
-  enderecos.dados.forEach(async endereco => {
-      let resultado = await controllerEnderecos.cadastrarLocalmente(endereco);
-      console.log(resultado);
-  });
-  pedido.dados.forEach(async pedido => {
-      let resultado = await controllerPedidos.cadastrarLocalmente(pedido);
-      console.log(resultado);
-  });
-
-  itensPedidos.dados.forEach(async itemPedido => {
-      let resultado = await controllerItemPedidos.cadastrarLocalmente(itemPedido);
-      console.log(resultado);
-  });
-  pagamentos.dados.forEach(async pagamento => {
-      let resultado = await controllerPagamentos.cadastrarLocalmente(pagamento);
-      console.log(resultado);
-  });
-
-
+  for (const item of dominioStatusPedido.dados) {
+    await controllerDominio.cadastrarLocalmente('statusPedido', item.descricao);
   }
+
+  for (const item of dominioTipoUsuario.dados) {
+    await controllerDominio.cadastrarLocalmente('tipoUsuario', item.descricao);
+  }
+
+  for (const item of dominioTipoPedido.dados) {
+    await controllerDominio.cadastrarLocalmente('tipoPedido', item.descricao_tipo);
+  }
+
+  for (const item of dominioStatusPagamento.dados) {
+    await controllerDominio.cadastrarLocalmente('statusPagamento', item.descricao);
+  }
+
+  for (const item of dominioMetodoPagamento.dados) {
+    await controllerDominio.cadastrarLocalmente('metodoPagamento', item.descricao_metodo);
+  }
+
+  // ===== CATEGORIAS =====
+
+  for (const categoria of categorias.dados) {
+    await controllerCategorias.cadastrarLocalmente(categoria);
+  }
+
+  // ===== PRODUTOS =====
+
+  for (const produto of produtos.dados) {
+    await controllerProdutos.cadastrarLocalmente(produto);
+  }
+
+  // ===== USUARIOS =====
+
+  for (const usuario of usuarios.dados) {
+    await controllerUsuarios.cadastrarLocalmente(usuario);
+  }
+
+    // ===== PEDIDOS =====
+
+  for (const pedido of pedidos.dados) {
+    await controllerPedidos.cadastrarLocalmente(pedido);
+  }
+
+
+  // ===== ENDERECOS =====
+
+  for (const endereco of enderecos.dados) {
+    await controllerEnderecos.cadastrarLocalmente(endereco);
+  }
+
 }
+}
+
 sincronizarSeOnline();
+
 
 const INTERVALO_SYNC =  1000 * 60 * 1; 
 
   const syncInterval = setInterval(async () => {
-    console.log('[Main] Ciclo de auto-sync iniciado...');
-
-    controllers.forEach(async controller => {
-      await APIFetch.enviarDadosLocais(controller);
-      await APIFetch.sincronizarDados(controller); 
-    });
-
+    sincronizarSeOnline();
   }, INTERVALO_SYNC);
 
   app.on('before-quit', () => {

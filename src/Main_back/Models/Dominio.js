@@ -20,7 +20,11 @@ class Dominio {
             metodoPagamento: {
                 tabela: 'dom_metodo_pagamento',
                 coluna: 'descricao_metodo'
-            }
+            },
+            statusPedido: {
+                tabela: 'dom_status_pedido',
+                coluna: 'descricao'
+             }
         };
 
     }
@@ -34,7 +38,7 @@ class Dominio {
     // LISTAR
     // =============================
 
-    listar(tipo) {
+    async listar(tipo) {
         const config = this.getConfig(tipo);
         if (!config) return [];
 
@@ -50,7 +54,7 @@ class Dominio {
     // BUSCAR POR ID
     // =============================
 
-    buscarPorId(tipo, id) {
+    async buscarPorId(tipo, id) {
         const config = this.getConfig(tipo);
         if (!config) return null;
 
@@ -66,12 +70,12 @@ class Dominio {
     // ADICIONAR
     // =============================
 
-    adicionar(tipo, descricao) {
+    async adicionar(tipo, descricao) {
         const config = this.getConfig(tipo);
         if (!config) return false;
 
         const stmt = db.prepare(`
-            INSERT INTO ${config.tabela} (${config.coluna})
+            INSERT OR IGNORE INTO ${config.tabela} (${config.coluna})
             VALUES (?)
         `);
 
@@ -83,7 +87,7 @@ class Dominio {
     // ATUALIZAR
     // =============================
 
-    atualizar(tipo, id, descricao) {
+    async atualizar(tipo, id, descricao) {
         const config = this.getConfig(tipo);
         if (!config) return false;
 
@@ -101,7 +105,7 @@ class Dominio {
     // REMOVER
     // =============================
 
-    remover(tipo, id) {
+    async remover(tipo, id) {
         const config = this.getConfig(tipo);
         if (!config) return false;
 

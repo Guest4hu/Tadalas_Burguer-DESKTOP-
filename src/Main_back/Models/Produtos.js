@@ -7,7 +7,7 @@ class Produtos {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT INTO tbl_produtos
+      INSERT OR IGNORE INTO tbl_produtos
       (uuid, nome, descricao, preco, estoque, categoria_id, foto_produto, sincronizado_em)
       VALUES (?, ?, ?, ?, ?, ?, ?, 0)
     `).run(

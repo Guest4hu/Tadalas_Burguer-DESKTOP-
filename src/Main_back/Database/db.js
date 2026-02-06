@@ -12,28 +12,45 @@ export function initDatabase() {
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS dom_tipo_usuario (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  descricao VARCHAR(50) NOT NULL UNIQUE
+  id INTEGER PRIMARY KEY,
+  uuid TEXT UNIQUE,
+  descricao TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS dom_tipo_pedido (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  descricao_tipo VARCHAR(50) NOT NULL UNIQUE
+  id INTEGER PRIMARY KEY,
+  uuid TEXT UNIQUE,
+  descricao_tipo TEXT NOT NULL UNIQUE
 );
 
     CREATE TABLE IF NOT EXISTS dom_status_pagamento (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  descricao VARCHAR(50) NOT NULL UNIQUE
+  id INTEGER PRIMARY KEY,
+  uuid TEXT UNIQUE,
+  descricao TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS dom_metodo_pagamento (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  descricao_metodo VARCHAR(45) NOT NULL UNIQUE
+  id INTEGER PRIMARY KEY,
+  uuid TEXT UNIQUE,
+  descricao_metodo TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS dom_status_pedido (
+    id INTEGER PRIMARY KEY,
+    uuid TEXT UNIQUE,
+    descricao TEXT NOT NULL UNIQUE,
+    criado_em DATETIME,
+    atualizado_em DATETIME,
+    excluido_em DATETIME
 );
 
 
+
+
+
+
    CREATE TABLE IF NOT EXISTS tbl_usuarios (
-  usuario_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuario_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
   nome TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
@@ -54,7 +71,7 @@ CREATE TABLE IF NOT EXISTS dom_metodo_pagamento (
 
 
 CREATE TABLE IF NOT EXISTS tbl_pedidos (
-  pedido_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  pedido_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   usuario_id INTEGER NOT NULL,
@@ -79,7 +96,7 @@ CREATE TABLE IF NOT EXISTS tbl_pedidos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_enderecos (
-  endereco_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  endereco_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   usuario_id INTEGER NOT NULL,
@@ -102,8 +119,9 @@ CREATE TABLE IF NOT EXISTS tbl_enderecos (
 
 
 
+
 CREATE TABLE IF NOT EXISTS tbl_categoria (
-  id_categoria INTEGER PRIMARY KEY AUTOINCREMENT,
+  id_categoria INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   nome TEXT NOT NULL,
@@ -118,7 +136,7 @@ CREATE TABLE IF NOT EXISTS tbl_categoria (
 
 
 CREATE TABLE IF NOT EXISTS tbl_produtos (
-  produto_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  produto_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   nome TEXT NOT NULL,
@@ -141,7 +159,7 @@ CREATE TABLE IF NOT EXISTS tbl_produtos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_pagamento (
-  pagamento_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  pagamento_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   pedido_id INTEGER NOT NULL,
@@ -167,7 +185,7 @@ CREATE TABLE IF NOT EXISTS tbl_pagamento (
 
 
 CREATE TABLE IF NOT EXISTS tbl_itens_pedidos (
-  item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  item_id INTEGER PRIMARY KEY,
   uuid TEXT UNIQUE,
 
   pedido_id INTEGER NOT NULL,
@@ -190,9 +208,6 @@ CREATE TABLE IF NOT EXISTS tbl_itens_pedidos (
 
 `
 );
-
-console.log('Database initialized successfully.');
-
 
 }
 

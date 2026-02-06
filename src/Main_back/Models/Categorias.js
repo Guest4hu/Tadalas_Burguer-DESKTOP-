@@ -7,7 +7,7 @@ class Categorias {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT INTO tbl_categoria
+      INSERT OR IGNORE INTO tbl_categoria
       (uuid, nome, descricao, sincronizado_em)
       VALUES (?, ?, ?, 0)
     `).run(
