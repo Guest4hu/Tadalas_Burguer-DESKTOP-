@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Usuarios {
 
-  adicionar(usuario) {
+  async adicionar(usuario) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -20,41 +20,41 @@ class Usuarios {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_usuarios WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  listarSincronizados() {
+  async listarSincronizados() {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 
       WHERE sincronizado_em = 1 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  buscarPorEmail(email) {
+  async buscarPorEmail(email) {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 
       WHERE email = ? AND excluido_em IS NULL
     `).get(email);
   }
 
-  atualizar(usuario) {
+  async atualizar(usuario) {
     return db.prepare(`
       UPDATE tbl_usuarios SET
         nome = ?,
@@ -71,7 +71,7 @@ class Usuarios {
     ).changes;
   }
 
-  remover(uuid) {
+  async remover(uuid) {
     return db.prepare(`
       UPDATE tbl_usuarios SET
         excluido_em = CURRENT_TIMESTAMP,
@@ -80,7 +80,7 @@ class Usuarios {
     `).run(uuid).changes > 0;
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_usuarios SET
         sincronizado_em = 1,

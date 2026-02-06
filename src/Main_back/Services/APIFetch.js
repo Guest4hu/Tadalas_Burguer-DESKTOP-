@@ -7,7 +7,7 @@ import PedidoModel from '../Models/Pedidos.js';
 import ProdutoModel from '../Models/Produtos.js';
 import UsuarioModel from '../Models/Usuarios.js';
 
-export default class APIFetch {
+class APIFetch {
   constructor(){
     this.chave = '5d242b5294d72df332ca2c492d2c0b9b'
     this.urlBase = `http://localhost:8000/backend/desktop/api`
@@ -43,7 +43,7 @@ export default class APIFetch {
       if (!response.ok) throw new Error(`Erro ao sincronizar dados`)
   
         const data = await response.json();
-        console.log('[Sync] Resposta recebida:', data.data);
+        //console.log('[Sync] Resposta recebida:', data.dados);
         return {sucess: true, dados: data};
 
       
@@ -59,9 +59,8 @@ export default class APIFetch {
       return {sucess: false, message: 'Sem conexão com a internet'};
     }
 
-  const dadosLocaisPendentes = await this.buscarDadosLocais();
+  const dadosLocaisPendentes = await this.buscarDadosLocais(controller);
 
-  console.log(dadosLocaisPendentes);
 
     if (dadosLocaisPendentes.length === 0) {
       console.log('[Sync Upload] Nada para enviar.');
@@ -101,21 +100,25 @@ export default class APIFetch {
 }
   async buscarDadosLocais(){
     const fontes = {
-  categorias: this.categoriaModel.listarPendentes(),
-  enderecos: this.enderecoModel.listarPendentes(),
-  itensPedidos: this.itemPedidoModel.listarPendentes(),
-  pagamentos: this.pagamentoModel.listarPendentes(),
-  pedidos: this.pedidoModel.listarPendentes(),
-  produtos: this.produtoModel.listarPendentes(),
-  usuarios: this.usuarioModel.listarPendentes(),
-};
+      categorias: await this.categoriaModel.listarPendentes(),
+      enderecos: await this.enderecoModel.listarPendentes(),
+      itensPedidos: await this.itemPedidoModel.listarPendentes(),
+      pagamentos: await this.pagamentoModel.listarPendentes(),
+      pedidos: await this.pedidoModel.listarPendentes(),
+      produtos: await this.produtoModel.listarPendentes(),
+      usuarios: await this.usuarioModel.listarPendentes(),
+    };
 
-const dados = Object.fromEntries(
-  filter(([, valor]) => valor.length)
-);
-  
-return dados;
+    console.log(fontes);
+
+    const dados = Object.fromEntries(
+      Object.entries(fontes).filter(([, valor]) => valor?.length)
+    );
+    return dados;
+  }
+
+
+
+
 }
-
-
-}
+export default new APIFetch();

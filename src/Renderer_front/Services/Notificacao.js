@@ -45,11 +45,6 @@ class Notificacao {
     });
   }
 
-
-
-
-
-
 }
 
 export default Notificacao

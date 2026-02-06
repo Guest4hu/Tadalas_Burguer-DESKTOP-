@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Produtos {
 
-  adicionar(produto) {
+  async adicionar(produto) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -21,41 +21,41 @@ class Produtos {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_produtos WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_produtos 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  listarSincronizados() {
+  async listarSincronizados() {
     return db.prepare(`
       SELECT * FROM tbl_produtos 
       WHERE sincronizado_em = 1 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_produtos 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  listarPorCategoria(categoria_id) {
+  async listarPorCategoria(categoria_id) {
     return db.prepare(`
       SELECT * FROM tbl_produtos
       WHERE categoria_id = ? AND excluido_em IS NULL
     `).all(categoria_id);
   }
 
-  atualizar(produto) {
+  async atualizar(produto) {
     return db.prepare(`
       UPDATE tbl_produtos SET
         nome = ?, descricao = ?, preco = ?, estoque = ?, categoria_id = ?,
@@ -72,7 +72,7 @@ class Produtos {
     ).changes;
   }
 
-  remover(uuid) {
+  async remover(uuid) {
     return db.prepare(`
       UPDATE tbl_produtos SET
         excluido_em = CURRENT_TIMESTAMP,
@@ -81,7 +81,7 @@ class Produtos {
     `).run(uuid).changes > 0;
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_produtos SET sincronizado_em = 1
       WHERE uuid = ?

@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Categorias {
 
-  adicionar(categoria) {
+  async adicionar(categoria) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -17,34 +17,34 @@ class Categorias {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_categoria WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_categoria 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  listarSincronizados() {
+  async listarSincronizados() {
     return db.prepare(`
       SELECT * FROM tbl_categoria 
       WHERE sincronizado_em = 1 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_categoria 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  atualizar(categoria) {
+  async atualizar(categoria) {
     return db.prepare(`
       UPDATE tbl_categoria SET
         nome = ?, descricao = ?,
@@ -58,7 +58,7 @@ class Categorias {
     ).changes;
   }
 
-  remover(uuid) {
+  async remover(uuid) {
     return db.prepare(`
       UPDATE tbl_categoria SET
         excluido_em = CURRENT_TIMESTAMP,
@@ -67,7 +67,7 @@ class Categorias {
     `).run(uuid).changes > 0;
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_categoria SET sincronizado_em = 1
       WHERE uuid = ?

@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Pedidos {
 
-  adicionar(pedido) {
+ async adicionar(pedido) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -18,41 +18,41 @@ class Pedidos {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_pedidos WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_pedidos 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  listarSincronizados() {
+  async listarSincronizados() {
     return db.prepare(`
       SELECT * FROM tbl_pedidos 
       WHERE sincronizado_em = 1 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_pedidos 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  listarPorUsuario(usuario_id) {
+  async listarPorUsuario(usuario_id) {
     return db.prepare(`
       SELECT * FROM tbl_pedidos
       WHERE usuario_id = ? AND excluido_em IS NULL
     `).all(usuario_id);
   }
 
-  atualizar(pedido) {
+  async atualizar(pedido) {
     return db.prepare(`
       UPDATE tbl_pedidos SET
         status_pedido_id = ?,
@@ -65,7 +65,7 @@ class Pedidos {
     ).changes;
   }
 
-  remover(uuid) {
+  async remover(uuid) {
     return db.prepare(`
       UPDATE tbl_pedidos SET
         excluido_em = CURRENT_TIMESTAMP,
@@ -74,7 +74,7 @@ class Pedidos {
     `).run(uuid).changes > 0;
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_pedidos SET sincronizado_em = 1
       WHERE uuid = ?

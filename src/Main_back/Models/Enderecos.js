@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Enderecos {
 
-  adicionar(endereco) {
+   async adicionar(endereco) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -22,41 +22,41 @@ class Enderecos {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_enderecos WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_enderecos 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  listarSincronizados() {
+  async listarSincronizados() {
     return db.prepare(`
       SELECT * FROM tbl_enderecos 
       WHERE sincronizado_em = 1 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_enderecos 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  listarPorUsuario(usuario_id) {
+  async listarPorUsuario(usuario_id) {
     return db.prepare(`
       SELECT * FROM tbl_enderecos
       WHERE usuario_id = ? AND excluido_em IS NULL
     `).all(usuario_id);
   }
 
-  atualizar(endereco) {
+  async atualizar(endereco) {
     return db.prepare(`
       UPDATE tbl_enderecos SET
         rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, cep = ?,
@@ -74,7 +74,7 @@ class Enderecos {
     ).changes;
   }
 
-  remover(uuid) {
+  async remover(uuid) {
     return db.prepare(`
       UPDATE tbl_enderecos SET
         excluido_em = CURRENT_TIMESTAMP,
@@ -83,7 +83,7 @@ class Enderecos {
     `).run(uuid).changes > 0;
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_enderecos SET sincronizado_em = 1
       WHERE uuid = ?

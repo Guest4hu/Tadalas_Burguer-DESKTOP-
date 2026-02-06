@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 class Pagamentos {
 
-  adicionar(pagamento) {
+async adicionar(pagamento) {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
@@ -19,27 +19,27 @@ class Pagamentos {
     ).lastInsertRowid;
   }
 
-  listar() {
+  async listar() {
     return db.prepare(`
       SELECT * FROM tbl_pagamento WHERE excluido_em IS NULL
     `).all();
   }
 
-  listarPendentes() {
+  async listarPendentes() {
     return db.prepare(`
       SELECT * FROM tbl_pagamento 
       WHERE sincronizado_em = 0 AND excluido_em IS NULL
     `).all();
   }
 
-  buscarPorUUID(uuid) {
+  async buscarPorUUID(uuid) {
     return db.prepare(`
       SELECT * FROM tbl_pagamento 
       WHERE uuid = ? AND excluido_em IS NULL
     `).get(uuid);
   }
 
-  marcarComoSincronizado(uuid) {
+  async marcarComoSincronizado(uuid) {
     return db.prepare(`
       UPDATE tbl_pagamento SET sincronizado_em = 1
       WHERE uuid = ?

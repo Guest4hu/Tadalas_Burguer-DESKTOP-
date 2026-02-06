@@ -1,12 +1,42 @@
-import Produtos from '../Models/Produtos'
+import Produtos from '../Models/Produtos.js';
 
-class ProdutosController {
+class ProdutoController {
+
     constructor() {
-        this.produtoModel = new Produtos()
+        this.model = new Produtos();
     }
-    listar(){
-        return this.produtoModel.listar()
+
+    async listar() {
+        return await this.model.listar();
+    }
+
+    async cadastrarLocalmente(produto) {
+
+        if (!produto.nome || !produto.preco || !produto.categoria_id)
+            return false;
+
+        return await this.model.adicionar(produto);
+    }
+
+    async atualizar(produto) {
+        if (!produto.uuid) return false;
+
+        const existente = await this.model.buscarPorUUID(produto.uuid);
+        if (!existente) return false;
+
+        return await this.model.atualizar(produto);
+    }
+
+    async buscarPorUUID(uuid) {
+        return await this.model.buscarPorUUID(uuid);
+    }
+
+    async remover(uuid) {
+        const existente = await this.model.buscarPorUUID(uuid);
+        if (!existente) return false;
+
+        return await this.model.remover(existente);
     }
 }
 
-export default ProdutosController
+export default ProdutoController;
