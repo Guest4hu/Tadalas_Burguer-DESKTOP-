@@ -87,6 +87,11 @@ app.whenReady().then(() => {
     return resultado;
   });
 
+  ipcMain.handle('get-products', async () => {
+    const produtos = await controllerProdutos.listar();
+    return produtos;
+  });
+
 async function sincronizarSeOnline() {
   console.log('[Main]' );
   const isOnline = net.isOnline();

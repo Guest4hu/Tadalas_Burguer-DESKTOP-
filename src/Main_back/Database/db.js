@@ -12,31 +12,31 @@ export function initDatabase() {
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS dom_tipo_usuario (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   descricao TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS dom_tipo_pedido (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   descricao_tipo TEXT NOT NULL UNIQUE
 );
 
     CREATE TABLE IF NOT EXISTS dom_status_pagamento (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   descricao TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS dom_metodo_pagamento (
-  id INTEGER PRIMARY KEY,
+  id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   descricao_metodo TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS dom_status_pedido (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY UNIQUE,
     uuid TEXT UNIQUE,
     descricao TEXT NOT NULL UNIQUE,
     criado_em DATETIME,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS dom_status_pedido (
 
 
    CREATE TABLE IF NOT EXISTS tbl_usuarios (
-  usuario_id INTEGER PRIMARY KEY,
+  usuario_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   nome TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS dom_status_pedido (
 
 
 CREATE TABLE IF NOT EXISTS tbl_pedidos (
-  pedido_id INTEGER PRIMARY KEY,
+  pedido_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   usuario_id INTEGER NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS tbl_pedidos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_enderecos (
-  endereco_id INTEGER PRIMARY KEY,
+  endereco_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   usuario_id INTEGER NOT NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS tbl_enderecos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_categoria (
-  id_categoria INTEGER PRIMARY KEY,
+  id_categoria INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   nome TEXT NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS tbl_categoria (
 
 
 CREATE TABLE IF NOT EXISTS tbl_produtos (
-  produto_id INTEGER PRIMARY KEY,
+  produto_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   nome TEXT NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS tbl_produtos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_pagamento (
-  pagamento_id INTEGER PRIMARY KEY,
+  pagamento_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   pedido_id INTEGER NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS tbl_pagamento (
 
 
 CREATE TABLE IF NOT EXISTS tbl_itens_pedidos (
-  item_id INTEGER PRIMARY KEY,
+  item_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
 
   pedido_id INTEGER NOT NULL,

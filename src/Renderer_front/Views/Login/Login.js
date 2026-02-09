@@ -99,25 +99,25 @@ export default class Login {
     }
 
     async validarCredenciais(){
-        const email = document.getElementById('email').value;
-            const senha = document.querySelector('input[name="senha"]').value;
-            const dados = {
-                email: email,
-                senha: senha
-            };
+        window.location.href = (`#PDV`);
+            // const email = document.getElementById('email').value;
+            // const senha = document.querySelector('input[name="senha"]').value;
+            // const dados = {
+            //     email: email,
+            //     senha: senha
+            // };
             
-             try {
-                 resultado = window.ElectronAPI.fazerLogin(dados);
-                 if (resultado.sucesso) {
-                     window.location.href = resultado.redirecionarPara;
-                        window.location.href = (`#PDV`);
-                 } else {                     
-                     this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
-                 }
+            //  try {
+            //      resultado = window.ElectronAPI.fazerLogin(dados);
+            //      if (resultado.sucesso) {
+            //          window.location.href = resultado.redirecionarPara;
+            //      } else {                     
+            //          this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
+            //      }
 
-             } catch (error) {
-                 this.notificacao.notificacaoMensagem('error', 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
-             }
+            //  } catch (error) {
+            //      this.notificacao.notificacaoMensagem('error', 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
+            //  }
         }
    
     async ativarEventos(){
