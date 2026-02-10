@@ -11,10 +11,14 @@ class ProdutoController {
     }
 
     async cadastrarLocalmente(produto) {
-        if (!produto.nome || !produto.preco || !produto.categoria_id)
-            return false;
-
-        return await this.model.adicionar(produto);
+        for (const element of produto.dados) {
+            if (await this.model.buscarPorID(element.produto_id) === true) {
+                console.log(`Produto com ID do produto: ${element.produto_id} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando produto com ID do produto: ${element.produto_id}...`);
+            await this.model.adicionar(element);
+        }
     }
 
     async atualizar(produto) {

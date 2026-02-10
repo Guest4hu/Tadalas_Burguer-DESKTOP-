@@ -11,8 +11,14 @@ class UsuarioController {
     }
 
     async cadastrarLocalmente(usuario) {
-        if (!usuario.nome || !usuario.email || !usuario.tipo_usuario_id) return false;
-        return await this.model.adicionar(usuario);
+       for (const element of usuario.dados) {
+            if (await this.model.buscarPorID(element.usuario_id) === true) {
+                console.log(`Usuário com ID ${element.usuario_id} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando usuário com ID ${element.usuario_id}...`);
+            await this.model.adicionar(element);
+        }
     }
 
    

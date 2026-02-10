@@ -42,11 +42,17 @@ class Enderecos {
     `).all();
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_enderecos 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorID(endereco_id) {
+    let stmt = db.prepare(`
+      SELECT endereco_id FROM tbl_enderecos 
+      WHERE endereco_id = ? AND excluido_em IS NULL
+    `).get(endereco_id);
+    stmt ??= { endereco_id: 0 };
+    if (stmt.endereco_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async listarPorUsuario(usuario_id) {

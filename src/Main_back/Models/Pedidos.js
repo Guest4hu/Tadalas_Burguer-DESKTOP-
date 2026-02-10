@@ -37,13 +37,18 @@ class Pedidos {
     `).all();
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_pedidos 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorID(pedido_id) {
+    let stmt = db.prepare(`
+      SELECT pedido_id FROM tbl_pedidos 
+      WHERE pedido_id = ? AND excluido_em IS NULL
+    `).get(pedido_id);
+    stmt ??= { pedido_id: 0 };
+    if (stmt.pedido_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
-
   async listarPorUsuario(usuario_id) {
     return db.prepare(`
       SELECT * FROM tbl_pedidos

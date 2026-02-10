@@ -28,9 +28,17 @@ class DominioController {
     // CADASTRAR
     // =============================
 
-    async cadastrarLocalmente(tipo, descricao) {
-        if (!tipo || !descricao) return false;
-        return this.model.adicionar(tipo, descricao);
+    async cadastrarLocalmente(dados ,tipo) {
+
+        for (const element of dados.dados) {
+            if (await this.model.buscarPorId(tipo, element.id)) {
+                console.log(`Domínio ${tipo} com ID ${element.id} já existe. Pulando...`);
+               continue;
+            }
+             this.model.adicionar(tipo, element);
+        
+
+        }
     }
 
     // =============================

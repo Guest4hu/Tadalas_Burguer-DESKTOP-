@@ -40,13 +40,18 @@ class Usuarios {
     `).all();
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_usuarios 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorID(usuario_id) {
+    let stmt = db.prepare(`
+      SELECT usuario_id FROM tbl_usuarios 
+      WHERE usuario_id = ? AND excluido_em IS NULL
+    `).get(usuario_id);
+    stmt ??= { usuario_id: 0 };
+    if (stmt.usuario_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
-
   async buscarPorEmail(email) {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 

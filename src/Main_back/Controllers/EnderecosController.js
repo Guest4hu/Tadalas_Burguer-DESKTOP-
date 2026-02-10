@@ -12,27 +12,32 @@ class EnderecoController {
 
     async cadastrarLocalmente(endereco) {
 
-        if (!endereco.usuario_id || !endereco.rua || !endereco.numero)
-            return false;
+        for (const element of endereco.dados) {
+            if (await this.model.buscarPorID(element.id_endereco) === true) {
+                console.log(`Endereço com ID ${element.id_endereco} já existe. Pulando...`);
+               continue;
+                }
+            console.log(`Cadastrando endereço com ID ${element.id_endereco}...`);
+            await this.model.adicionar(element);
+            }
+        }
 
-        return await this.model.adicionar(endereco);
-    }
 
     async atualizar(endereco) {
-        if (!endereco.uuid) return false;
+        if (!endereco.id_endereco) return false;
 
-        const existente = await this.model.buscarPorUUID(endereco.uuid);
+        const existente = await this.model.buscarPorID(endereco.id_endereco);
         if (!existente) return false;
 
         return await this.model.atualizar(endereco);
     }
 
-    async buscarPorUUID(uuid) {
-        return await this.model.buscarPorUUID(uuid);
+    async buscarPorID(id) {
+        return await this.model.buscarPorID(id);
     }
 
-    async remover(uuid) {
-        const existente = await this.model.buscarPorUUID(uuid);
+    async remover(id) {
+        const existente = await this.model.buscarPorID(id);
         if (!existente) return false;
 
         return await this.model.remover(existente);

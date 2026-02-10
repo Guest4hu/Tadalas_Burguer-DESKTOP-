@@ -11,11 +11,15 @@ class ItemPedidoController {
     }
 
     async cadastrarLocalmente(item) {
-
-        if (!item.pedido_id || !item.produto_id || !item.valor_unitario)
-            return false;
-
-        return await this.model.adicionar(item);
+        for (const element of item.dados) {
+            if (await this.model.buscarPorUUID(element.uuid) === true) {
+                console.log(`Item de pedido com UUID ${element.uuid} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando item de pedido com UUID ${element.uuid}...`);
+             await this.model.adicionar(element);
+        }
+      
     }
 
     async atualizar(item) {

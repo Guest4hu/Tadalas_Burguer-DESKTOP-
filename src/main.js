@@ -97,69 +97,49 @@ async function sincronizarSeOnline() {
   const isOnline = net.isOnline();
   if (isOnline) {
     console.log('[Main] Aplicativo iniciado com internet. Iniciando sincronização automática...');
-   const dominioStatusPedido = await APIFetch.sincronizarDados('dominioStatusPedido');
+  const dominioStatusPedido = await APIFetch.sincronizarDados('dominioStatusPedido');
   const dominioTipoUsuario = await APIFetch.sincronizarDados('dominioTipoUsuario');
   const dominioTipoPedido = await APIFetch.sincronizarDados('dominioTipoPedido');
   const dominioStatusPagamento = await APIFetch.sincronizarDados('dominioStatusPagamento');
   const dominioMetodoPagamento = await APIFetch.sincronizarDados('dominioMetodoPagamento');
   const categorias = await APIFetch.sincronizarDados('categorias');
-  const produtos = await APIFetch.sincronizarDados('produtos');
-  const usuarios = await APIFetch.sincronizarDados('usuarios');
-  const enderecos = await APIFetch.sincronizarDados('enderecos');
-  const pedidos = await APIFetch.sincronizarDados('pedidos');
+  // const produtos = await APIFetch.sincronizarDados('produtos');
+  // const usuarios = await APIFetch.sincronizarDados('usuarios');
+  // const enderecos = await APIFetch.sincronizarDados('enderecos');
+  // const pedidos = await APIFetch.sincronizarDados('pedidos');
 
-  // ===== DOMINIOS =====
-
-  for (const item of dominioStatusPedido.dados) {
-    await controllerDominio.cadastrarLocalmente('statusPedido', item.descricao);
-  }
-
-  for (const item of dominioTipoUsuario.dados) {
-    await controllerDominio.cadastrarLocalmente('tipoUsuario', item.descricao);
-  }
-
-  for (const item of dominioTipoPedido.dados) {
-    await controllerDominio.cadastrarLocalmente('tipoPedido', item.descricao_tipo);
-  }
-
-  for (const item of dominioStatusPagamento.dados) {
-    await controllerDominio.cadastrarLocalmente('statusPagamento', item.descricao);
-  }
-
-  for (const item of dominioMetodoPagamento.dados) {
-    await controllerDominio.cadastrarLocalmente('metodoPagamento', item.descricao_metodo);
-  }
+   //===== DOMINIOS =====
+  await controllerDominio.cadastrarLocalmente(dominioStatusPedido, 'statusPedido');
+  await controllerDominio.cadastrarLocalmente(dominioTipoUsuario, 'tipoUsuario');
+  await controllerDominio.cadastrarLocalmente(dominioTipoPedido,'tipoPedido');
+  await controllerDominio.cadastrarLocalmente(dominioStatusPagamento,'statusPagamento');
+  await controllerDominio.cadastrarLocalmente(dominioMetodoPagamento,'metodoPagamento');
+  
 
   // ===== CATEGORIAS =====
 
-  for (const categoria of categorias.dados) {
-    await controllerCategorias.cadastrarLocalmente(categoria);
-  }
+
+     await controllerCategorias.cadastrarLocalmente(categorias);
+
 
   // ===== PRODUTOS =====
 
-  for (const produto of produtos.dados) {
-    await controllerProdutos.cadastrarLocalmente(produto);
-  }
+  // await controllerProdutos.cadastrarLocalmente(produto);
+
 
   // ===== USUARIOS =====
 
-  for (const usuario of usuarios.dados) {
-    await controllerUsuarios.cadastrarLocalmente(usuario);
-  }
+  // await controllerUsuarios.cadastrarLocalmente(usuario);
+  
 
-    // ===== PEDIDOS =====
+  // ===== PEDIDOS =====
 
-  for (const pedido of pedidos.dados) {
-    await controllerPedidos.cadastrarLocalmente(pedido);
-  }
+  // await controllerPedidos.cadastrarLocalmente(pedido);
 
 
   // ===== ENDERECOS =====
 
-  for (const endereco of enderecos.dados) {
-    await controllerEnderecos.cadastrarLocalmente(endereco);
-  }
+  // await controllerEnderecos.cadastrarLocalmente(endereco);
 
 }
 }

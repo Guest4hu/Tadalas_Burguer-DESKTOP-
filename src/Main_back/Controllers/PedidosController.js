@@ -11,10 +11,14 @@ class PedidoController {
     }
 
     async cadastrarLocalmente(pedido) {
-        if (!pedido.usuario_id || !pedido.status_pedido_id || !pedido.tipo_pedido)
-            return false;
-
-        return await this.model.adicionar(pedido);
+        for (const element of pedido.dados) {
+            if (await this.model.buscarPorID(element.id_pedido) === true) {
+                console.log(`Pedido com ID ${element.id_pedido} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando pedido com ID ${element.id_pedido}...`);
+            await this.model.adicionar(element);
+        }
     }
 
     async atualizar(pedido) {

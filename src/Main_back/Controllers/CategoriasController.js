@@ -11,14 +11,20 @@ class CategoriaController {
     }
 
     async cadastrarLocalmente(categoria) {
-        if (!categoria.nome) return false;
-        return await this.model.adicionar(categoria);
+       for (const element of categoria.dados) {
+            if (await this.model.buscarPorID(element.id_categoria) === true) {
+                console.log(`Categoria ${element.id_categoria} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando categoria ${element.id_categoria}...`);
+             await this.model.adicionar(element);
+        };        
     }
 
     async atualizar(categoria) {
         if (!categoria.uuid) return false;
 
-        const existente = await this.model.buscarPorUUID(categoria.uuid);
+        const existente = await this.model.buscarPorID(categoria.uuid);
         if (!existente) return false;
 
         return await this.model.atualizar(categoria);

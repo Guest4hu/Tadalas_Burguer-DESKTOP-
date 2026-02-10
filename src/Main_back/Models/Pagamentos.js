@@ -32,11 +32,17 @@ async adicionar(pagamento) {
     `).all();
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_pagamento 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorID(pagamento_id) {
+    let stmt = db.prepare(`
+      SELECT pagamento_id FROM tbl_pagamento 
+      WHERE pagamento_id = ? AND excluido_em IS NULL
+    `).get(pagamento_id);
+    stmt ??= { pagamento_id: 0 };
+    if (stmt.pagamento_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async marcarComoSincronizado(uuid) {

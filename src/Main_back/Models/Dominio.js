@@ -58,21 +58,34 @@ class Dominio {
         const config = this.getConfig(tipo);
         if (!config) return null;
 
-        const stmt = db.prepare(`
-            SELECT * FROM ${config.tabela}
+        let stmt = db.prepare(`
+            SELECT id FROM ${config.tabela}
             WHERE id = ?
-        `);
-
-        return stmt.get(id);
+        `).get(id);
+        stmt ??= {id: 0};
+        if (stmt.id > 0) {
+      return true;
+    } else {
+      return false;
+    }
     }
 
     // =============================
     // ADICIONAR
     // =============================
 
-    async adicionar(tipo, descricao) {
+    async adicionar(tipo, dados) {
         const config = this.getConfig(tipo);
         if (!config) return false;
+        if (config.tabela === 'dom_tipo_pedido') {
+            descricao = dados.descricao_tipo;
+        }
+            else if (config.tabela === 'dom_metodo_pagamento') {
+                descricao = dados.descricao_metodo;
+            }
+            else {
+                descricao = dados.descricao;
+            }
 
         const stmt = db.prepare(`
             INSERT OR IGNORE INTO ${config.tabela} (${config.coluna})

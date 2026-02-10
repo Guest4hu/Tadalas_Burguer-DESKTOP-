@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS tbl_enderecos (
   cidade TEXT NOT NULL,
   estado TEXT NOT NULL,
   cep TEXT NOT NULL,
-
+ 
   criado_em DATETIME NOT NULL DEFAULT (datetime('now')),
   atualizado_em DATETIME,
   excluido_em DATETIME,
@@ -121,8 +121,7 @@ CREATE TABLE IF NOT EXISTS tbl_enderecos (
 
 
 CREATE TABLE IF NOT EXISTS tbl_categoria (
-  id_categoria INTEGER PRIMARY KEY UNIQUE,
-  uuid TEXT UNIQUE,
+  id_categoria INTEGER PRIMARY KEY,
 
   nome TEXT NOT NULL,
   descricao TEXT,

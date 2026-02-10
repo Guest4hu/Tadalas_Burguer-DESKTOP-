@@ -39,11 +39,17 @@ class ItensPedido {
     `).all(pedido_id);
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_itens_pedidos 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorUUID(item_id) {
+    let stmt = db.prepare(`
+      SELECT item_id FROM tbl_itens_pedidos 
+      WHERE item_id = ? AND excluido_em IS NULL
+    `).get(item_id);
+    stmt ??= { item_id: 0 };
+    if (stmt.item_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async remover(uuid) {

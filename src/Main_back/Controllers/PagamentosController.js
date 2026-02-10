@@ -11,12 +11,17 @@ class PagamentoController {
     }
 
     async cadastrarLocalmente(pagamento) {
-
-        if (!pagamento.pedido_id || !pagamento.metodo || !pagamento.valor_total)
-            return false;
-
-        return await this.model.adicionar(pagamento);
+        for (const element of pagamento.dados) {
+            if (await this.model.buscarPorID(element.pagamento_id) === true) {
+                console.log(`Pagamento com UUID ${element.pagamento_id} já existe. Pulando...`);
+               continue;
+            }
+            console.log(`Cadastrando pagamento com UUID ${element.pagamento_id}...`);
+             await this.model.adicionar(element);
+        }
     }
+
+       
 
     async atualizar(pagamento) {
         if (!pagamento.uuid) return false;

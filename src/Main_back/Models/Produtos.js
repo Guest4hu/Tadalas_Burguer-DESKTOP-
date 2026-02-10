@@ -41,13 +41,18 @@ class Produtos {
     `).all();
   }
 
-  async buscarPorUUID(uuid) {
-    return db.prepare(`
-      SELECT * FROM tbl_produtos 
-      WHERE uuid = ? AND excluido_em IS NULL
-    `).get(uuid);
+  async buscarPorID(produto_id) {
+    let stmt = db.prepare(`
+      SELECT produto_id FROM tbl_produtos 
+      WHERE produto_id = ? AND excluido_em IS NULL
+    `).get(produto_id);
+    stmt ??= { produto_id: 0 };
+    if (stmt.produto_id > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
-
   async listarPorCategoria(categoria_id) {
     return db.prepare(`
       SELECT * FROM tbl_produtos
