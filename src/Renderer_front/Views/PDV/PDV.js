@@ -5,7 +5,6 @@ export default class PDV {
     }
 
     async renderizar() {
-        console.log("PDV carregando...");
         return `
             <!-- Window Chrome -->
             <div class="window-chrome">
@@ -209,8 +208,6 @@ export default class PDV {
         if (!grid) return;
 
         const categories = await window.ElectronAPI.getCategories();
-        console.log(categories);
-
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.className = 'category-btn';
@@ -222,7 +219,7 @@ export default class PDV {
     
 
     addToCart(product) {
-        const existingItem = this.cart.find(item => item.id === product.id);
+        const existingItem = this.cart.find(item => item.produto_id === product.produto_id);
 
         if (existingItem) {
             existingItem.quantity++;
@@ -255,23 +252,23 @@ export default class PDV {
                 cartItem.className = 'cart-item';
                 cartItem.innerHTML = `
                     <div class="cart-item-image">
-                        <i class="fa fa-${item.icon}"></i>
+                        <img src="${item.foto_produto}" alt="${item.nome}" />
                     </div>
                     <div class="cart-item-details">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                        <div class="cart-item-name">${item.nome}</div>
+                        <div class="cart-item-price">R$ ${item.preco.toFixed(2)}</div>
                     </div>
                     <div class="cart-item-controls">
                         <div class="quantity-control">
-                            <button class="qty-btn" data-action="decrease" data-id="${item.id}">
+                            <button class="qty-btn" data-action="decrease" data-id="${item.produto_id}">
                                 <i class="fa fa-minus"></i>
                             </button>
                             <span class="qty-value">${item.quantity}</span>
-                            <button class="qty-btn" data-action="increase" data-id="${item.id}">
+                            <button class="qty-btn" data-action="increase" data-id="${item.produto_id}">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
-                        <span class="remove-btn" data-id="${item.id}">
+                        <span class="remove-btn" data-id="${item.produto_id}">
                             <i class="fa fa-trash"></i> Remover
                         </span>
                     </div>
@@ -283,7 +280,7 @@ export default class PDV {
 
         // Update totals
         const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
-        const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const subtotal = this.cart.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
 
         if (itemCount) itemCount.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
 
@@ -323,7 +320,7 @@ export default class PDV {
     }
 
     increaseQuantity(id) {
-        const item = this.cart.find(i => i.id === id);
+        const item = this.cart.find(i => i.produto_id === id);
         if (item) {
             item.quantity++;
             this.updateCart();
@@ -331,7 +328,7 @@ export default class PDV {
     }
 
     decreaseQuantity(id) {
-        const item = this.cart.find(i => i.id === id);
+        const item = this.cart.find(i => i.produto_id === id);
         if (item && item.quantity > 1) {
             item.quantity--;
             this.updateCart();
@@ -339,7 +336,7 @@ export default class PDV {
     }
 
     removeFromCart(id) {
-        this.cart = this.cart.filter(item => item.id !== id);
+        this.cart = this.cart.filter(item => item.produto_id !== id);
         this.updateCart();
     }
 

@@ -64,7 +64,7 @@ class Produtos {
   async atualizar(produto) {
     return db.prepare(`
       UPDATE tbl_produtos SET
-        nome = ?, descricao = ?, preco = ?, estoque = ?, categoria_id = ?,
+        nome = ?, descricao = ?, preco = ?, estoque = ?, categoria_id = ?, foto_produto = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         sincronizado_em = 0
       WHERE produto_id = ?
@@ -74,6 +74,7 @@ class Produtos {
       produto.preco,
       produto.estoque,
       produto.categoria_id,
+      produto.foto_produto,
       produto.produto_id
     ).changes;
   }

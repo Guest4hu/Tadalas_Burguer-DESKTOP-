@@ -7,14 +7,15 @@ class Pedidos {
     const uuid = crypto.randomUUID();
     return db.prepare(`
      INSERT OR IGNORE INTO tbl_pedidos
-      (pedido_id, uuid, usuario_id, status_pedido_id, tipo_pedido, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, 0)
+      (pedido_id, uuid, usuario_id, status_pedido_id, tipo_pedido, sincronizado_em, foto_produto)
+      VALUES (?, ?, ?, ?, ?, 0, ?)
     `).run(
       pedido.pedido_id,
       uuid,
       pedido.usuario_id,
       pedido.status_pedido_id,
-      pedido.tipo_pedido
+      pedido.tipo_pedido,
+      pedido.foto_produto
     ).lastInsertRowid;
   }
 
