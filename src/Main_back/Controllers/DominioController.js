@@ -32,8 +32,8 @@ class DominioController {
 
         for (const element of dados.dados) {
             if (await this.model.buscarPorId(tipo, element.id)) {
-                console.log(`Domínio ${tipo} com ID ${element.id} já existe. Pulando...`);
-                console.log(element);
+                console.log(`Domínio ${tipo} com ID ${element.id} já existe. atualizando...`);
+                await this.model.atualizar(tipo, element.id, element.descricao);
                continue;
             }
             console.log("Element Antes de cadastrar:");

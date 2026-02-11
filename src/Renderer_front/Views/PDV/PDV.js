@@ -33,21 +33,9 @@ export default class PDV {
                     </div>
 
                     <!-- Categories -->
-                    <div class="categories">
+                    <div class="categories" id="gridCategories">
                         <button class="category-btn active" data-category="todos">
                             <i class="fa fa-th"></i> Todos
-                        </button>
-                        <button class="category-btn" data-category="bebidas">
-                            <i class="fa fa-coffee"></i> Bebidas
-                        </button>
-                        <button class="category-btn" data-category="lanches">
-                            <i class="fa fa-cutlery"></i> Lanches
-                        </button>
-                        <button class="category-btn" data-category="doces">
-                            <i class="fa fa-birthday-cake"></i> Doces
-                        </button>
-                        <button class="category-btn" data-category="salgados">
-                            <i class="fa fa-fire"></i> Salgados
                         </button>
                     </div>
 
@@ -173,7 +161,7 @@ export default class PDV {
     async ativarEventos() {
         console.log("Inicializando eventos do PDV...");
         await this.loadProducts();
-        this.loadCategories();
+        await this.loadCategories();
         this.setupEventListeners();
     }
 
@@ -185,21 +173,18 @@ export default class PDV {
 
 
         try {
-           const products = await window.ElectronAPI.getProducts();
-
-            console.log('Produtos carregados:', products);
-
-
+            const products = await window.ElectronAPI.getProducts();
             const filtered = products.filter(p => {
-                const matchCategory = category === 'todos' || p.category === category;
-                const matchSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
-                return matchCategory && matchSearch;
+                const matchesCategory = category === 'todos' || p.categoria_id === parseInt(category);
+                const matchesSearch = p.nome.toLowerCase().includes(searchTerm.toLowerCase()) || p.descricao.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+
             });
-   
-           filtered.forEach(product => {
-               const card = document.createElement('div');
-               card.className = 'product-card';
-               card.innerHTML = `
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
                    <div class="product-image">
                        <img src="${product.foto_produto}">
                    </div>
@@ -207,31 +192,44 @@ export default class PDV {
                    <div class="product-description">${product.descricao}</div>
                    <div class="product-stock">Estoque: ${product.estoque}</div>
                    <div class="product-price">R$ ${product.preco.toFixed(2)}</div>
-                   <input type="hidden" value="${product.id}" />
+                   <input type="hidden" value="${product.produto_id}" />
+                   <input type="hidden" value="${product.categoria_id}" />
                `;
-               card.onclick = () => this.addToCart(product);
-               grid.appendChild(card);
-           });
+                card.onclick = () => this.addToCart(product);
+                grid.appendChild(card);
+            });
         } catch (error) {
             console.error('Erro ao carregar produtos:', error);
-            grid.innerHTML = '<p style="color: var(--danger);">Erro ao carregar produtos. Tente novamente mais tarde.</p>';            
+            grid.innerHTML = '<p style="color: var(--danger);">Erro ao carregar produtos. Tente novamente mais tarde.</p>';
         }
     }
 
-    loadCategories() {
+    async loadCategories() {
+        const grid = document.getElementById('gridCategories');
+        if (!grid) return;
 
+        const categories = await window.ElectronAPI.getCategories();
+        console.log(categories);
 
-    }
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'category-btn';
+                btn.dataset.category = cat.id_categoria;
+                btn.innerHTML = `<i class="fa fa-${cat.icone}"></i> ${cat.nome}`;
+                grid.appendChild(btn);
+            });
+        }
+    
 
     addToCart(product) {
         const existingItem = this.cart.find(item => item.id === product.id);
-        
+
         if (existingItem) {
             existingItem.quantity++;
         } else {
             this.cart.push({ ...product, quantity: 1 });
         }
-        
+
         this.updateCart();
     }
 
@@ -286,9 +284,9 @@ export default class PDV {
         // Update totals
         const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
         const subtotal = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        
+
         if (itemCount) itemCount.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
-        
+
         const subtotalEl = document.getElementById('subtotal');
         const totalEl = document.getElementById('total');
         if (subtotalEl) subtotalEl.textContent = `R$ ${subtotal.toFixed(2)}`;
@@ -305,7 +303,7 @@ export default class PDV {
                 e.stopPropagation();
                 const id = parseInt(btn.dataset.id);
                 const action = btn.dataset.action;
-                
+
                 if (action === 'increase') {
                     this.increaseQuantity(id);
                 } else if (action === 'decrease') {
@@ -358,7 +356,7 @@ export default class PDV {
         const paymentModal = document.getElementById('paymentModal');
         const receivedAmount = document.getElementById('receivedAmount');
         const changeAmount = document.getElementById('changeAmount');
-        
+
         if (modalTotal) modalTotal.textContent = `R$ ${total.toFixed(2)}`;
         if (paymentModal) paymentModal.classList.add('active');
         if (receivedAmount) receivedAmount.value = '';
@@ -375,10 +373,10 @@ export default class PDV {
         if (this.selectedPaymentMethod === 'dinheiro') {
             const receivedInput = document.getElementById('receivedAmount');
             if (!receivedInput) return;
-            
+
             const received = parseFloat(receivedInput.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
             const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
+
             if (received < total) {
                 alert('Valor recebido insuficiente!');
                 return;
@@ -440,7 +438,7 @@ export default class PDV {
                 document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('selected'));
                 method.classList.add('selected');
                 this.selectedPaymentMethod = method.dataset.method;
-                
+
                 // Show/hide cash payment fields
                 const cashPayment = document.getElementById('cashPayment');
                 if (cashPayment) {
@@ -456,7 +454,7 @@ export default class PDV {
                 const value = parseFloat(e.target.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
                 const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 const change = value - total;
-                
+
                 const changeAmount = document.getElementById('changeAmount');
                 if (changeAmount) {
                     changeAmount.textContent = `R$ ${change >= 0 ? change.toFixed(2) : '0,00'}`;

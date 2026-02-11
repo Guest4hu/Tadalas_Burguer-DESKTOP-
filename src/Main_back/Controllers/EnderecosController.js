@@ -14,7 +14,8 @@ class EnderecoController {
 
         for (const element of endereco.dados) {
             if (await this.model.buscarPorID(element.endereco_id) === true) {
-                console.log(`Endereço com ID ${element.endereco_id} já existe. Pulando...`);
+                console.log(`Endereço com ID ${element.endereco_id} já existe. Atualizando...`);
+                await this.model.atualizar(element);
                continue;
                 }
             console.log(`Cadastrando endereço com ID ${element.endereco_id}...`);

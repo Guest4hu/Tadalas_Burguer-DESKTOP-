@@ -13,7 +13,8 @@ class ProdutoController {
     async cadastrarLocalmente(produto) {
         for (const element of produto.dados) {
             if (await this.model.buscarPorID(element.produto_id) === true) {
-                console.log(`Produto com ID do produto: ${element.produto_id} já existe. Pulando...`);
+                console.log(`Produto com ID do produto: ${element.produto_id} já existe. Atualizando...`);
+                await this.model.atualizar(element);
                continue;
             }
             console.log(`Cadastrando produto com ID do produto: ${element.produto_id}...`);

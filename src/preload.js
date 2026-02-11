@@ -9,5 +9,6 @@ contextBridge.exposeInMainWorld(
         fazerLogin: (dados) => ipcRenderer.invoke('fazer-login', dados),
         enviarCodigoRecuperacao: (email) => ipcRenderer.invoke('enviar-codigo-recuperacao', email),
         getProducts: async () => ipcRenderer.invoke('get-products'),
+        getCategories: async () => ipcRenderer.invoke('get-categories'),
     },
 )

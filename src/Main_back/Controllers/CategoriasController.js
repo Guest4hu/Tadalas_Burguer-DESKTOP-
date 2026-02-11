@@ -13,7 +13,8 @@ class CategoriaController {
     async cadastrarLocalmente(categoria) {
        for (const element of categoria.dados) {
             if (await this.model.buscarPorID(element.id_categoria) === true) {
-                console.log(`Categoria ${element.id_categoria} já existe. Pulando...`);
+                console.log(`Categoria ${element.id_categoria} já existe. atualizando...`);
+                await this.model.atualizar(element);
                continue;
             }
             console.log(`Cadastrando categoria ${element.id_categoria}...`);

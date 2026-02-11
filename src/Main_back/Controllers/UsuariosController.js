@@ -13,7 +13,8 @@ class UsuarioController {
     async cadastrarLocalmente(usuario) {
        for (const element of usuario.dados) {
             if (await this.model.buscarPorID(element.usuario_id) === true) {
-                console.log(`Usuário com ID ${element.usuario_id} já existe. Pulando...`);
+                console.log(`Usuário com ID ${element.usuario_id} já existe. Atualizando...`);
+                await this.model.atualizar(element);
                continue;
             }
             console.log(`Cadastrando usuário com ID ${element.usuario_id}...`);

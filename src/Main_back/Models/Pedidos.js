@@ -63,10 +63,10 @@ class Pedidos {
         status_pedido_id = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         sincronizado_em = 0
-      WHERE uuid = ?
+      WHERE pedido_id = ?
     `).run(
       pedido.status_pedido_id,
-      pedido.uuid
+      pedido.pedido_id
     ).changes;
   }
 

@@ -13,7 +13,7 @@ class ItemPedidoController {
     async cadastrarLocalmente(item) {
         for (const element of item.dados) {
             if (await this.model.buscarPorUUID(element.uuid) === true) {
-                console.log(`Item de pedido com UUID ${element.uuid} já existe. Pulando...`);
+                console.log(`Item de pedido com UUID ${element.uuid} já existe. Atualizar...`);
                continue;
             }
             console.log(`Cadastrando item de pedido com UUID ${element.uuid}...`);

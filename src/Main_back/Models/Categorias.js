@@ -63,7 +63,7 @@ class Categorias {
     `).run(
       categoria.nome,
       categoria.descricao,
-      categoria.uuid
+      categoria.id_categoria
     ).changes;
   }
 

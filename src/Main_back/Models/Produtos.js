@@ -67,14 +67,14 @@ class Produtos {
         nome = ?, descricao = ?, preco = ?, estoque = ?, categoria_id = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         sincronizado_em = 0
-      WHERE uuid = ?
+      WHERE produto_id = ?
     `).run(
       produto.nome,
       produto.descricao,
       produto.preco,
       produto.estoque,
       produto.categoria_id,
-      produto.uuid
+      produto.produto_id
     ).changes;
   }
 

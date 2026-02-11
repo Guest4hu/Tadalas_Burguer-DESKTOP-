@@ -35,15 +35,6 @@ const controllerCategorias = new CategoriaController()
 const controllerPedidos = new PedidoController()
 
 
-// controllers = [
-//   produtos,
-//   usuarios,
-//   pagamentos,
-//   itemPedidos,
-//   enderecos,
-//   categorias,
-//   pedidos
-// ]
 
 
 const createWindow = () => {
@@ -91,6 +82,12 @@ app.whenReady().then(() => {
     const produtos = await controllerProdutos.listar();
     return produtos;
   });
+
+  ipcMain.handle('get-categories', async () => {
+    const categorias = await controllerCategorias.listar();
+    return categorias;
+   });
+
 
 async function sincronizarSeOnline() {
   console.log('[Main]' );

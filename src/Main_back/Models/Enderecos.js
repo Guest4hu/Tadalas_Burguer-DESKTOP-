@@ -69,7 +69,7 @@ class Enderecos {
         rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, cep = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         sincronizado_em = 0
-      WHERE uuid = ?
+      WHERE endereco_id = ?
     `).run(
       endereco.rua,
       endereco.numero,
@@ -77,7 +77,7 @@ class Enderecos {
       endereco.cidade,
       endereco.estado,
       endereco.cep,
-      endereco.uuid
+      endereco.endereco_id
     ).changes;
   }
 

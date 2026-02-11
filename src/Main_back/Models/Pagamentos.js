@@ -20,6 +20,22 @@ async adicionar(pagamento) {
     ).lastInsertRowid;
   }
 
+  async atualizar(pagamento) {
+    return db.prepare(`
+      UPDATE tbl_pagamento SET
+        pedido_id = ?, metodo = ?, status_pagamento_id = ?, valor_total = ?,
+        atualizado_em = CURRENT_TIMESTAMP,
+        sincronizado_em = 0
+      WHERE pagamento_id = ?
+    `).run(
+      pagamento.pedido_id,
+      pagamento.metodo,
+      pagamento.status_pagamento_id,
+      pagamento.valor_total,
+      pagamento.pagamento_id
+    ).changes;
+  }
+
   async listar() {
     return db.prepare(`
       SELECT * FROM tbl_pagamento WHERE excluido_em IS NULL

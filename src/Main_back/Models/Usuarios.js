@@ -68,12 +68,12 @@ class Usuarios {
         telefone = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         sincronizado_em = 0
-      WHERE uuid = ?
+      WHERE usuario_id = ?
     `).run(
       usuario.nome,
       usuario.email,
       usuario.telefone,
-      usuario.uuid
+      usuario.usuario_id
     ).changes;
   }
 

@@ -13,7 +13,8 @@ class PagamentoController {
     async cadastrarLocalmente(pagamento) {
         for (const element of pagamento.dados) {
             if (await this.model.buscarPorID(element.pagamento_id) === true) {
-                console.log(`Pagamento com UUID ${element.pagamento_id} já existe. Pulando...`);
+                console.log(`Pagamento com UUID ${element.pagamento_id} já existe. Atualizando...`);
+                await this.model.atualizar(element);
                continue;
             }
             console.log(`Cadastrando pagamento com UUID ${element.pagamento_id}...`);

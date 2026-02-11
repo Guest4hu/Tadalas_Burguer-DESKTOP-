@@ -78,8 +78,6 @@ class Dominio {
         let descricao;
         const config = this.getConfig(tipo);
         if (!config) return false;
-        console.log(`Adicionando ao domínio ${tipo}...`);
-        console.log(dados);
         if (config.tabela === 'dom_tipo_pedido') {
             descricao = dados.descricao_tipo;
         }
@@ -103,17 +101,26 @@ class Dominio {
     // ATUALIZAR
     // =============================
 
-    async atualizar(tipo, id, descricao) {
+    async atualizar(tipo, dados) {
+        let descricao;
         const config = this.getConfig(tipo);
         if (!config) return false;
-
+        if (config.tabela === 'dom_tipo_pedido') {
+            descricao = dados.descricao_tipo;
+        }
+            else if (config.tabela === 'dom_metodo_pagamento') {
+                descricao = dados.descricao_metodo;
+            }
+            else {
+                descricao = dados.descricao;
+            }
         const stmt = db.prepare(`
             UPDATE ${config.tabela}
             SET ${config.coluna} = ?
             WHERE id = ?
         `);
 
-        const info = stmt.run(descricao, id);
+        const info = stmt.run(descricao, dados.id);
         return info.changes > 0;
     }
 
