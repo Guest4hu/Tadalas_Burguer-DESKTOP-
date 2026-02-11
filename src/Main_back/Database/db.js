@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS tbl_enderecos (
 
 CREATE TABLE IF NOT EXISTS tbl_categoria (
   id_categoria INTEGER PRIMARY KEY,
+  uuid TEXT UNIQUE,
 
   nome TEXT NOT NULL,
   descricao TEXT,

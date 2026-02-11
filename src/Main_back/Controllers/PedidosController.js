@@ -12,11 +12,11 @@ class PedidoController {
 
     async cadastrarLocalmente(pedido) {
         for (const element of pedido.dados) {
-            if (await this.model.buscarPorID(element.id_pedido) === true) {
-                console.log(`Pedido com ID ${element.id_pedido} já existe. Pulando...`);
+            if (await this.model.buscarPorID(element.pedido_id) === true) {
+                console.log(`Pedido com ID ${element.pedido_id} já existe. Pulando...`);
                continue;
             }
-            console.log(`Cadastrando pedido com ID ${element.id_pedido}...`);
+            console.log(`Cadastrando pedido com ID ${element.pedido_id}...`);
             await this.model.adicionar(element);
         }
     }

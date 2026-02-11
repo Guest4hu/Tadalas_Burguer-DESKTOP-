@@ -75,8 +75,11 @@ class Dominio {
     // =============================
 
     async adicionar(tipo, dados) {
+        let descricao;
         const config = this.getConfig(tipo);
         if (!config) return false;
+        console.log(`Adicionando ao domínio ${tipo}...`);
+        console.log(dados);
         if (config.tabela === 'dom_tipo_pedido') {
             descricao = dados.descricao_tipo;
         }

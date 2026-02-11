@@ -33,11 +33,12 @@ class DominioController {
         for (const element of dados.dados) {
             if (await this.model.buscarPorId(tipo, element.id)) {
                 console.log(`Domínio ${tipo} com ID ${element.id} já existe. Pulando...`);
+                console.log(element);
                continue;
             }
-             this.model.adicionar(tipo, element);
-        
-
+            console.log("Element Antes de cadastrar:");
+            console.log(element);
+            await this.model.adicionar(tipo, element);
         }
     }
 

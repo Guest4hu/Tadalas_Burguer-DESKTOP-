@@ -8,9 +8,10 @@ class Produtos {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_produtos
-      (uuid, nome, descricao, preco, estoque, categoria_id, foto_produto, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 0)
+      (produto_id, uuid, nome, descricao, preco, estoque, categoria_id, foto_produto, sincronizado_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
     `).run(
+      produto.produto_id,
       uuid,
       produto.nome,
       produto.descricao,

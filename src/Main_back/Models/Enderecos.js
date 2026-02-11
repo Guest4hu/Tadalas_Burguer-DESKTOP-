@@ -8,9 +8,10 @@ class Enderecos {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_enderecos
-      (uuid, usuario_id, rua, numero, bairro, cidade, estado, cep, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+      (endereco_id, uuid, usuario_id, rua, numero, bairro, cidade, estado, cep, sincronizado_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
     `).run(
+      endereco.endereco_id,
       uuid,
       endereco.usuario_id,
       endereco.rua,

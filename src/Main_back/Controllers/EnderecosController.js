@@ -13,11 +13,11 @@ class EnderecoController {
     async cadastrarLocalmente(endereco) {
 
         for (const element of endereco.dados) {
-            if (await this.model.buscarPorID(element.id_endereco) === true) {
-                console.log(`Endereço com ID ${element.id_endereco} já existe. Pulando...`);
+            if (await this.model.buscarPorID(element.endereco_id) === true) {
+                console.log(`Endereço com ID ${element.endereco_id} já existe. Pulando...`);
                continue;
                 }
-            console.log(`Cadastrando endereço com ID ${element.id_endereco}...`);
+            console.log(`Cadastrando endereço com ID ${element.endereco_id}...`);
             await this.model.adicionar(element);
             }
         }

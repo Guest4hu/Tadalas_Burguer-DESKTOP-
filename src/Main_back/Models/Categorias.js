@@ -10,13 +10,13 @@ class Categorias {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_categoria
-      (uuid, nome, descricao, sincronizado_em,id_categoria)
-      VALUES (?, ?, ?, 0, ?)
+      (id_categoria, uuid, nome, descricao, sincronizado_em)
+      VALUES (?, ?, ?, ?, 0)
     `).run(
+      categoria.id_categoria,
       uuid,
       categoria.nome,
-      categoria.descricao,
-      categoria.id_categoria
+      categoria.descricao
     ).lastInsertRowid;
   }
 

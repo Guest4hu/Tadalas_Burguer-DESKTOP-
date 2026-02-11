@@ -7,10 +7,11 @@ class Usuarios {
     const uuid = crypto.randomUUID();
 
     return db.prepare(`
-      INSERT OR IGNORE INTO  tbl_usuarios
-      (uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, 0)
+      INSERT OR IGNORE INTO tbl_usuarios
+      (usuario_id, uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 0)
     `).run(
+      usuario.usuario_id,
       uuid,
       usuario.nome,
       usuario.email,

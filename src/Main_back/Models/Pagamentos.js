@@ -8,9 +8,10 @@ async adicionar(pagamento) {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_pagamento
-      (uuid, pedido_id, metodo, status_pagamento_id, valor_total, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, 0)
+      (pagamento_id, uuid, pedido_id, metodo, status_pagamento_id, valor_total, sincronizado_em)
+      VALUES (?, ?, ?, ?, ?, ?, 0)
     `).run(
+      pagamento.pagamento_id,
       uuid,
       pagamento.pedido_id,
       pagamento.metodo,

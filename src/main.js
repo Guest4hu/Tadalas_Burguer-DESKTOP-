@@ -103,10 +103,10 @@ async function sincronizarSeOnline() {
   const dominioStatusPagamento = await APIFetch.sincronizarDados('dominioStatusPagamento');
   const dominioMetodoPagamento = await APIFetch.sincronizarDados('dominioMetodoPagamento');
   const categorias = await APIFetch.sincronizarDados('categorias');
-  // const produtos = await APIFetch.sincronizarDados('produtos');
-  // const usuarios = await APIFetch.sincronizarDados('usuarios');
-  // const enderecos = await APIFetch.sincronizarDados('enderecos');
-  // const pedidos = await APIFetch.sincronizarDados('pedidos');
+  const produtos = await APIFetch.sincronizarDados('produtos');
+  const usuarios = await APIFetch.sincronizarDados('usuarios');
+  const pedidos = await APIFetch.sincronizarDados('pedidos');
+  const enderecos = await APIFetch.sincronizarDados('enderecos');
 
    //===== DOMINIOS =====
   await controllerDominio.cadastrarLocalmente(dominioStatusPedido, 'statusPedido');
@@ -119,27 +119,27 @@ async function sincronizarSeOnline() {
   // ===== CATEGORIAS =====
 
 
-     await controllerCategorias.cadastrarLocalmente(categorias);
+  await controllerCategorias.cadastrarLocalmente(categorias);
 
 
   // ===== PRODUTOS =====
 
-  // await controllerProdutos.cadastrarLocalmente(produto);
+  await controllerProdutos.cadastrarLocalmente(produtos);
 
 
   // ===== USUARIOS =====
 
-  // await controllerUsuarios.cadastrarLocalmente(usuario);
+  await controllerUsuarios.cadastrarLocalmente(usuarios);
   
 
   // ===== PEDIDOS =====
 
-  // await controllerPedidos.cadastrarLocalmente(pedido);
+  await controllerPedidos.cadastrarLocalmente(pedidos);
 
 
   // ===== ENDERECOS =====
 
-  // await controllerEnderecos.cadastrarLocalmente(endereco);
+  await controllerEnderecos.cadastrarLocalmente(enderecos);
 
 }
 }
