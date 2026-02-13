@@ -7,8 +7,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 
+/* Importação de variáveis globais Para offline */
+@import url("importacaoDeFora/W3scholl.css");
+@import url("importacaoDeFora/Font-Awesome.css");
+@import url("importacaoDeFora/googleApi.css");
+@import url("importacaoDeFora/gstatic.css");
+@import url("importacaoDeFora/googleApiCss2.css");
+
+
 
 
 /* Importação de estilos específicos de páginas */
 @import url("paginaLogin/login.css");
 @import url("paginaPDV/pdv.css");
+@import url("paginaPDV/carrinho.css");
+@import url("paginaPDV/modalFinalizarCompra.css");

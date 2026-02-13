@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-class Notificacao {
+export class Notificacao {
     constructor() {
         this.Swal = Swal;
 

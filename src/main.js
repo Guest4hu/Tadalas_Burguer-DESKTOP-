@@ -88,6 +88,11 @@ app.whenReady().then(() => {
     return categorias;
    });
 
+   ipcMain.handle('get-user-data', async () => {
+    const userData = await controllerUsuarios.listar();
+    return userData;
+   });
+
 
 async function sincronizarSeOnline() {
   console.log('[Main]' );
