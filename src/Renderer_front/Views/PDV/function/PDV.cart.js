@@ -1,8 +1,11 @@
+import Notificacao from "../../../Services/Notificacao";
+
 
 export class CartManager {
     constructor(callbacks) {
         this.cart = [];
         this.callbacks = callbacks; // e.g. onCheckout
+        this.notificacao = new Notificacao();
     }
 
     init() {
@@ -43,8 +46,9 @@ export class CartManager {
         }
     }
 
-    clearCart() {
-        if (confirm('Deseja limpar o carrinho?')) {
+    async clearCart() {
+        
+        if (await this.notificacao.alertaConfirmacao('Limpar carrinho', 'Tem certeza que deseja limpar o carrinho? Essa ação não pode ser desfeita.', 'warning')) {
             this.cart = [];
             this.updateCartUI();
         }
@@ -154,10 +158,12 @@ export class CartManager {
         });
     }
 
-    setupEventListeners() {
+    async setupEventListeners() {
         const clearCartBtn = document.getElementById('clearCartBtn');
         if (clearCartBtn) {
-            clearCartBtn.addEventListener('click', () => this.clearCart());
+            clearCartBtn.addEventListener('click', async () => {
+                await this.clearCart();
+            });
         }
 
         const finishSaleBtn = document.getElementById('finishSaleBtn');

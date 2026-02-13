@@ -19,6 +19,24 @@ class APIFetch {
     this.produtoModel = new ProdutoModel();
     this.usuarioModel = new UsuarioModel();
   }
+
+  async fetchData(url, method = 'GET') {
+    if (!net.isOnline()){
+      return {sucess: false, message:"Sem conexão com a internet"};
+    }
+      const config ={
+        method: method,
+        cache: "no-store",
+        headers:{
+          "Content-Type": "application/json"
+        }
+      }
+      const response = await fetch(url, config)
+      const data = await response.json();
+      return {sucess: true, dados: data};
+  }
+
+
   
   async sincronizarDados(controller) {
     if (!net.isOnline()) {

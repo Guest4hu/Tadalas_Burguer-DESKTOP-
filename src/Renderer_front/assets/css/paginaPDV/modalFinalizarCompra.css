@@ -7,7 +7,7 @@
     grid-template-columns: 1.2fr 1fr;
     gap: 0;
     height: 90vh;
-    max-height: 650px;
+    max-height: 800px;
     width: 95vw;
     max-width: 1100px;
     background: var(--bg);

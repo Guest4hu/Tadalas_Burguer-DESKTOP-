@@ -21,6 +21,18 @@ export default class PDV {
         });
     }
 
+    nomeValido(nome) {
+
+    nome = nome.trim();
+
+    if (nome.length < 3) return false;
+
+    const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[\s'-][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/;
+
+    return regex.test(nome);
+}
+
+
     async renderizar() {
         return Layout.render();
     }
@@ -36,13 +48,42 @@ export default class PDV {
   
 
     handleOrderConfirmation(orderData) {
-        console.log('Order Data:', orderData);
+        console.log('Dados do pedido recebidos para confirmação:', orderData);
+        // Validation Orderdata
+            if (orderData.customer.name === '' ||orderData.customer.phone === '' || orderData.customer.DateOfBirth === '' || !orderData.items || orderData.items.length === 0) {
+                this.notificacao.notificacaoMensagem('error', 'Dados do pedido incompletos. Verifique as informações e tente novamente.');
+                return;
+            }
+
+            console.log(orderData.customer.phone.length)
+            if(orderData.customer.phone.length  < 10) {
+                this.notificacao.notificacaoMensagem('error', 'Número de telefone inválido. Verifique as informações e tente novamente.');
+                return;
+            }
+
+            if(orderData.customer.DateOfBirth.length < 9) {
+                this.notificacao.notificacaoMensagem('error', 'Data de nascimento inválida. Verifique as informações e tente novamente.');
+                return;
+            }
+            if (!this.nomeValido(orderData.customer.name)) {
+               this.notificacao.notificacaoMensagem('error', 'Nome contém caracteres inválidos.');
+                return;
+}
+
+
+
+
+
+            if(orderData.orderType === 'entrega' && !orderData.address) {
+                console.error('Endereço é obrigatório para pedidos de entrega:', orderData);
+                this.notificacao.notificacaoMensagem('error', 'Endereço é obrigatório para pedidos de entrega. Verifique as informações e tente novamente.');
+                return;
+            }
+
+
+
 
         // Display Success Message
-        let orderTypeText = 'Pedido';
-        if (orderData.orderType === 'local') orderTypeText = 'Pedido (Consumo Local)';
-        if (orderData.orderType === 'retirada') orderTypeText = 'Pedido (Retirada)';
-        if (orderData.orderType === 'entrega') orderTypeText = 'Pedido (Entrega)';
 
 
         // Display Success Message

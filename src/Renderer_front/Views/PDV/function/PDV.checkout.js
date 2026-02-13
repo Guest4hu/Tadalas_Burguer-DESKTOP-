@@ -1,20 +1,34 @@
 
 import { Utils } from './PDV.utils.js';
+import Notificacao from '../../../Services/Notificacao.js';
 
 export class CheckoutManager {
     constructor(callbacks) {
         this.callbacks = callbacks; // e.g. onConfirmOrder
-        this.orderType = 'local'; // 'local', 'entrega', 'retirada'
-        this.selectedPaymentMethod = 'dinheiro';
+        this.orderType = '1'; // 'local', 'entrega', 'retirada'
+        this.selectedPaymentMethod = '5';
         this.selectedCustomer = null;
         this.deliveryFee = 5.00;
         this.customers = [];
+        this.address = [];
         this.cart = []; // Will be set when opening modal
+        this.notification = new Notificacao
     }
 
     async init() {
         await this.loadCustomers();
+        await this.loadAdress();
         this.setupEventListeners();
+    }
+
+    async loadAdress(){
+        try {
+            this.address = await window.ElectronAPI.getAdressData();
+        } catch (error) {
+            console.error("Erro ao carregar clientes:", error);
+            this.customers = [];
+        }
+
     }
 
     async loadCustomers() {
@@ -31,8 +45,8 @@ export class CheckoutManager {
         const paymentModal = document.getElementById('paymentModal');
 
         // Reset state
-        this.orderType = 'local';
-        this.selectedPaymentMethod = 'dinheiro';
+        this.orderType = '1';
+        this.selectedPaymentMethod = '5';
         this.selectedCustomer = null;
 
         // Reset UI
@@ -50,7 +64,7 @@ export class CheckoutManager {
 
     resetForms() {
         // Clear inputs
-        const fields = ['receivedAmount', 'customerName', 'customerPhone', 'addressStreet',
+        const fields = ['receivedAmount', 'customerName', 'customerPhone','customerPassword','customerConfirmPassword', 'addressStreet',"addressID",
             'addressNumber', 'addressComplement', 'addressNeighborhood',
             'addressZipCode', 'addressReference', 'orderNotes', 'customerSearchInput'];
 
@@ -91,16 +105,16 @@ export class CheckoutManager {
         const deliveryAddressSection = document.getElementById('deliveryAddressSection');
 
         if (deliveryAddressSection) {
-            deliveryAddressSection.style.display = this.orderType === 'entrega' ? 'block' : 'none';
+            deliveryAddressSection.style.display = this.orderType === '3' ? 'block' : 'none';
         }
 
         // Clear customer selection on type change (optional, but keeps it clean)
-        // this.clearSelectedCustomer(); 
+        this.clearSelectedCustomer(); 
     }
 
     updateModalTotal() {
         const subtotal = this.cart.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
-        const fee = this.orderType === 'entrega' ? this.deliveryFee : 0;
+        const fee = this.orderType === '3' ? this.deliveryFee : 0;
         const total = subtotal + fee;
 
         const modalTotal = document.getElementById('modalTotal');
@@ -157,23 +171,31 @@ export class CheckoutManager {
 
         const displayDiv = document.getElementById('selectedCustomerDisplay');
         const nameEl = document.getElementById('selectedCustomerName');
-        const phoneEl = document.getElementById('selectedCustomerPhone');
 
         if (nameEl) nameEl.textContent = customer.nome;
-        if (phoneEl) phoneEl.textContent = customer.telefone; // Format if needed
 
         if (displayDiv) displayDiv.style.display = 'block';
         document.getElementById('customerSearchBox').style.display = 'none';
         document.getElementById('newCustomerForm').style.display = 'none';
 
         // Auto-fill address if available and order type is delivery
-        if (this.orderType === 'entrega') {
-            document.getElementById('addressStreet').value = customer.rua || '';
-            document.getElementById('addressNumber').value = customer.numero || '';
-            document.getElementById('addressNeighborhood').value = customer.bairro || '';
-            document.getElementById('addressZipCode').value = customer.cep || '';
-            document.getElementById('addressComplement').value = customer.complemento || '';
-        }
+        if (this.orderType === '3') {
+        const userAddress = this.address.find(add => add.usuario_id === customer.usuario_id) ?? '';
+                this.autoFillAddress(userAddress)
+        }   
+
+
+
+    }
+    autoFillAddress(addressData){
+        const cep = Utils.applyZipCodeMask({value: addressData.cep || addressData.dados.cep || ''});
+
+        document.getElementById('addressID').value = addressData.endereco_id || '';
+                document.getElementById('addressStreet').value = addressData.rua || addressData.dados.logradouro || '';
+                document.getElementById('addressNumber').value = addressData.numero || '';
+                document.getElementById('addressNeighborhood').value = addressData.bairro || addressData.dados.bairro || '';
+                document.getElementById('addressZipCode').value = cep;
+                document.getElementById('addressComplement').value = addressData.complemento || '';
     }
 
     clearSelectedCustomer() {
@@ -183,51 +205,27 @@ export class CheckoutManager {
 
     // ==================== VALIDATION & CONFIRMATION ====================
     validateOrder() {
-        if (this.orderType === 'local') return true;
+        if (this.orderType === '1') return true;
 
-        // Check Customer
-        const hasSelectedCustomer = !!this.selectedCustomer;
-        const newName = document.getElementById('customerName')?.value.trim();
-        const newPhone = document.getElementById('customerPhone')?.value.trim();
-
-        if (!hasSelectedCustomer && (!newName || !newPhone)) {
-            alert('Por favor, selecione um cliente ou preencha os dados do novo cliente.');
-            return false;
-        }
 
         // Check Address for Delivery
-        if (this.orderType === 'entrega') {
+        if (this.orderType === '3') {
             const street = document.getElementById('addressStreet')?.value.trim();
             const number = document.getElementById('addressNumber')?.value.trim();
             const neighborhood = document.getElementById('addressNeighborhood')?.value.trim();
 
             if (!street || !number || !neighborhood) {
-                alert('Por favor, preencha o endereço de entrega completo.');
-                return false;
+                this.notification.notificacaoMensagem('error','Por favor, preencha o endereço de entrega completo.');
+                return false
             }
         }
-
-        // Check Payment
-        if (this.selectedPaymentMethod === 'dinheiro') {
-            const receivedInput = document.getElementById('receivedAmount');
-            const received = parseFloat(receivedInput.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
-
-            const subtotal = this.cart.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
-            const fee = this.orderType === 'entrega' ? this.deliveryFee : 0;
-            const total = subtotal + fee;
-
-            if (received < total) {
-                alert('Valor recebido insuficiente!');
-                return false;
-            }
-        }
-
         return true;
     }
 
+
     getOrderData() {
         const subtotal = this.cart.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
-        const fee = this.orderType === 'entrega' ? this.deliveryFee : 0;
+        const fee = this.orderType === '3' ? this.deliveryFee : 0;
 
         const data = {
             orderType: this.orderType,
@@ -236,22 +234,27 @@ export class CheckoutManager {
             subtotal: subtotal,
             deliveryFee: fee,
             total: subtotal + fee,
-            notes: document.getElementById('orderNotes')?.value || ''
+            notes: document.getElementById('orderNotes')?.value || '',
         };
 
         // Customer Info
         if (this.selectedCustomer) {
             data.customer = { ...this.selectedCustomer, isExisting: true };
         } else {
+            const phoneClean = document.getElementById('customerPhone')?.value?.replace(/\D/g, '');
+            const birthDate = document.getElementById('customerPassword')?.value;
+            const firstPassword = birthDate.replace(/\D/g, ''); 
             data.customer = {
-                name: document.getElementById('customerName')?.value,
-                phone: document.getElementById('customerPhone')?.value,
-                isExisting: false
+            name: document.getElementById('customerName')?.value || '',
+            phone: phoneClean,
+            password: firstPassword,
+            DateOfBirth: birthDate,
+            isExisting: false
             };
         }
 
         // Address Info
-        if (this.orderType === 'entrega') {
+        if (this.orderType === '3') {
             data.address = {
                 street: document.getElementById('addressStreet')?.value,
                 number: document.getElementById('addressNumber')?.value,
@@ -279,17 +282,17 @@ export class CheckoutManager {
             if (this.validateOrder()) {
                 if (this.callbacks.onConfirmOrder) {
                     this.callbacks.onConfirmOrder(this.getOrderData());
-                    this.closeModal();
                 }
             }
         });
+
 
         // Order Type Selection
         document.querySelectorAll('[data-order-type]').forEach(el => {
             el.addEventListener('click', () => {
                 document.querySelectorAll('[data-order-type]').forEach(x => x.classList.remove('selected'));
                 el.classList.add('selected');
-                this.setOrderType(el.dataset.orderType);
+                this.setOrderType(el.dataset.orderid);
             });
         });
 
@@ -298,10 +301,10 @@ export class CheckoutManager {
             el.addEventListener('click', () => {
                 document.querySelectorAll('[data-method]').forEach(x => x.classList.remove('selected'));
                 el.classList.add('selected');
-                this.selectedPaymentMethod = el.dataset.method;
+                this.selectedPaymentMethod = el.dataset.methodid;
 
                 const cashPayment = document.getElementById('cashPayment');
-                if (cashPayment) cashPayment.style.display = this.selectedPaymentMethod === 'dinheiro' ? 'block' : 'none';
+                if (cashPayment) cashPayment.style.display = this.selectedPaymentMethod === '5' ? 'block' : 'none';
             });
         });
 
@@ -317,6 +320,12 @@ export class CheckoutManager {
                 }, 300);
             });
         }
+
+
+        
+
+
+
 
         document.getElementById('searchExistingCustomerBtn')?.addEventListener('click', () => {
             document.getElementById('customerSearchBox').style.display = 'block';
@@ -337,7 +346,7 @@ export class CheckoutManager {
         document.getElementById('receivedAmount')?.addEventListener('input', (e) => {
             const value = parseFloat(e.target.value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
             const subtotal = this.cart.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
-            const fee = this.orderType === 'entrega' ? this.deliveryFee : 0;
+            const fee = this.orderType === '3' ? this.deliveryFee : 0;
             const total = subtotal + fee;
             const change = value - total;
 
@@ -347,6 +356,12 @@ export class CheckoutManager {
 
         // Masks
         document.getElementById('customerPhone')?.addEventListener('input', (e) => Utils.applyPhoneMask(e.target));
-        document.getElementById('addressZipCode')?.addEventListener('input', (e) => Utils.applyZipCodeMask(e.target));
+        document.getElementById('addressZipCode')?.addEventListener('input', async (e) => {
+            const cepiNPUT = Utils.applyZipCodeMask(e.target);
+            if(cepiNPUT.length === 9){
+                const addresCEP = await window.ElectronAPI.getCEPaddress(cepiNPUT);
+                this.autoFillAddress(addresCEP)
+            }
+        });
     }
 }

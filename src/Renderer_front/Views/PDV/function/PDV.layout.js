@@ -114,15 +114,15 @@ export const Layout = {
                     <div class="form-section">
                         <label class="section-label">Tipo de Pedido</label>
                         <div class="order-type-compact">
-                            <div class="order-type-option selected" data-order-type="local">
+                            <div class="order-type-option selected" data-order-type="local" data-orderID="1">
                                 <i class='fa fa-hand-o-down'></i>
                                 <span>Local</span>
                             </div>
-                            <div class="order-type-option" data-order-type="retirada">
+                            <div class="order-type-option" data-order-type="retirada" data-orderID="2">
                                 <i class="fa fa-shopping-bag"></i>
                                 <span>Retirada</span>
                             </div>
-                            <div class="order-type-option" data-order-type="entrega">
+                            <div class="order-type-option" data-order-type="entrega" data-orderID="3">
                                 <i class="fa fa-motorcycle"></i>
                                 <span>Entrega</span>
                             </div>
@@ -158,14 +158,15 @@ export const Layout = {
 
                         <!-- Customer Search Compact -->
                         <div id="customerSearchBox" class="compact-search-box" style="display: none;">
-                            <input type="text" class="input-compact" id="customerSearchInput" placeholder="Nome ou telefone...">
+                            <input type="text" class="input-compact" id="customerSearchInput" placeholder="Nome ou telefone e email...">
                             <div id="customerSearchResults" class="search-results-compact"></div>
                         </div>
 
                         <!-- New Customer Form Compact -->
                         <div id="newCustomerForm" style="display: none;">
                             <input type="text" class="input-compact" id="customerName" placeholder="Nome completo">
-                            <input type="tel" class="input-compact" id="customerPhone" placeholder="Telefone">
+                            <input type="tel" class="input-compact" id="customerPhone" placeholder="Telefone do Usuario">
+                            <input type="date" class="input-compact" id="customerPassword" placeholder="Data de nascimento" max="4">
                         </div>
                     </div>
 
@@ -175,10 +176,11 @@ export const Layout = {
                             <i class="fa fa-map-marker"></i> Endereço de Entrega
                         </label>
                         <div class="address-compact-grid">
+                            <input type="hidden" id="addressID">
+                            <input type="text" class="input-compact" id="addressZipCode" placeholder="CEP">
                             <input type="text" class="input-compact" id="addressStreet" placeholder="Rua" style="grid-column: 1 / 3;">
                             <input type="text" class="input-compact" id="addressNumber" placeholder="Nº">
                             <input type="text" class="input-compact" id="addressNeighborhood" placeholder="Bairro">
-                            <input type="text" class="input-compact" id="addressZipCode" placeholder="CEP">
                             <input type="text" class="input-compact" id="addressComplement" placeholder="Complemento (opcional)" style="grid-column: 1 / 3;">
                         </div>
                         <div class="delivery-fee-compact">

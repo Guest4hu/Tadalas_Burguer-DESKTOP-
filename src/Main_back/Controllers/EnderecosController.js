@@ -1,9 +1,15 @@
 import Enderecos from '../Models/Enderecos.js';
+import APIFetch from '../Services/APIFetch.js';
 
 class EnderecoController {
 
     constructor() {
         this.model = new Enderecos();
+        this.fetch = APIFetch;
+    }
+
+    async searchCEP(cep){
+        return this.fetch.fetchData(`https://viacep.com.br/ws/${cep}/json/`, 'GET');
     }
 
     async listar() {

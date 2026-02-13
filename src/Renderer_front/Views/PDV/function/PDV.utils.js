@@ -16,10 +16,30 @@ export const Utils = {
         }
     },
 
-    applyZipCodeMask(input) {
+    aplyDateMask(input) {
         let value = input.value.replace(/\D/g, '');
         if (value.length > 8) value = value.slice(0, 8);
-        input.value = value.replace(/(\d{5})(\d{0,3})/, '$1-$2');
+        if (value.length > 4) {
+            input.value = value.replace(/(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
+        }
+        else if (value.length > 2) {
+            input.value = value.replace(/(\d{2})(\d{0,2})/, '$1/$2');
+        }
+        else {
+            input.value = value.replace(/(\d*)/, '$1');
+        }
+    },
+
+
+
+    applyZipCodeMask(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.substring(0, 8);
+    if (value.length > 5) {
+    value = value.substring(0, 5) + '-' + value.substring(5, 8);
+  }
+  input.value = value;
+        return value
     },
 
     formatCurrency(value) {

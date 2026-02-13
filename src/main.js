@@ -93,6 +93,16 @@ app.whenReady().then(() => {
     return userData;
    });
 
+   ipcMain.handle('get-adress-data', async () => {
+    const adressData = await controllerEnderecos.listar();
+    return adressData
+   })
+
+ipcMain.handle('getcepaddress', async (event, cepInput) =>{
+    console.log("Chamando searchCEP...");
+    return await controllerEnderecos.searchCEP(cepInput);
+})
+
 
 async function sincronizarSeOnline() {
   console.log('[Main]' );
