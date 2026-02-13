@@ -3,9 +3,11 @@ import { Layout } from './function/PDV.layout.js';
 import { ProductManager } from './function/PDV.products.js';
 import { CartManager } from './function/PDV.cart.js';
 import { CheckoutManager } from './function/PDV.checkout.js';
+import notificacao from '../../Services/Notificacao.js';
 
 export default class PDV {
     constructor() {
+        this.notificacao = new notificacao();
         this.cartManager = new CartManager({
             onCheckout: (cartItems) => this.checkoutManager.openModal(cartItems)
         });
@@ -34,7 +36,7 @@ export default class PDV {
   
 
     handleOrderConfirmation(orderData) {
-        console.log('Pedido confirmado:', orderData);
+        console.log('Order Data:', orderData);
 
         // Display Success Message
         let orderTypeText = 'Pedido';
@@ -42,9 +44,10 @@ export default class PDV {
         if (orderData.orderType === 'retirada') orderTypeText = 'Pedido (Retirada)';
         if (orderData.orderType === 'entrega') orderTypeText = 'Pedido (Entrega)';
 
-        alert(`${orderTypeText} confirmado com sucesso!`);
 
-        // Clear Cart
+        // Display Success Message
+        this.notificacao.notificacaoMensagem('success', `Pedido confirmado com sucesso!`);
+
         this.cartManager.clearWithoutConfirmation();
     }
 }

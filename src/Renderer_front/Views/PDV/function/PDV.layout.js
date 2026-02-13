@@ -207,21 +207,25 @@ export const Layout = {
                     <div class="form-section">
                         <label class="section-label">Forma de Pagamento</label>
                         <div class="payment-methods-compact">
-                            <div class="payment-option selected" data-method="dinheiro">
+                            <div class="payment-option selected" data-method="dinheiro" data-methodID="5">
                                 <i class="fa fa-money"></i>
                                 <span>Dinheiro</span>
                             </div>
-                            <div class="payment-option" data-method="pix">
+                            <div class="payment-option" data-method="pix" data-methodID="1">
                                 <i class="fa fa-qrcode"></i>
                                 <span>PIX</span>
                             </div>
-                            <div class="payment-option" data-method="debito">
+                            <div class="payment-option" data-method="debito" data-methodID="3">
                                 <i class="fa fa-credit-card"></i>
                                 <span>Débito</span>
                             </div>
-                            <div class="payment-option" data-method="credito">
+                            <div class="payment-option" data-method="credito" data-methodID="2">
                                 <i class="fa fa-credit-card-alt"></i>
                                 <span>Crédito</span>
+                            </div>
+                            <div class="payment-option" data-method="beneficios" data-methodID="4">
+                                <i class="fa fa-credit-card-alt"></i>
+                                <span>Benefícios</span>
                             </div>
                         </div>
                     </div>
