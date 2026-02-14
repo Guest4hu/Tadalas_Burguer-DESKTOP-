@@ -24,14 +24,15 @@ class Pedidos {
     const uuid = crypto.randomUUID();
     return db.prepare(`
      INSERT OR IGNORE INTO tbl_pedidos
-      (pedido_id, uuid, usuario_id, status_pedido_id, tipo_pedido, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, 0)
+      (pedido_id, uuid, usuario_id, status_pedido_id, tipo_pedido, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, 0, ?)
     `).run(
       pedido.pedido_id,
       uuid,
       pedido.usuario_id,
       pedido.status_pedido_id,
-      pedido.tipo_pedido
+      pedido.tipo_pedido,
+      pedido.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -79,10 +80,12 @@ class Pedidos {
       UPDATE tbl_pedidos SET
         status_pedido_id = ?,
         atualizado_em = CURRENT_TIMESTAMP,
+        excluido_em = ?,
         sincronizado_em = 0
       WHERE pedido_id = ?
     `).run(
       pedido.status_pedido_id,
+      pedido.excluido_em || null,
       pedido.pedido_id
     ).changes;
   }

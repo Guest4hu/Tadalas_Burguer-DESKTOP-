@@ -44,18 +44,13 @@ CREATE TABLE IF NOT EXISTS dom_status_pedido (
     excluido_em DATETIME
 );
 
-
-
-
-
-
    CREATE TABLE IF NOT EXISTS tbl_usuarios (
   usuario_id INTEGER PRIMARY KEY UNIQUE,
   uuid TEXT UNIQUE,
   nome TEXT NOT NULL,
-  email TEXT NOT NULL UNIQUE,
+  email TEXT UNIQUE,
   senha TEXT NOT NULL,
-  telefone TEXT,
+  telefone TEXT UNIQUE,
 
   tipo_usuario_id INTEGER NOT NULL,
 

@@ -22,8 +22,8 @@ class Usuarios {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_usuarios
-      (usuario_id, uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, ?, 0)
+      (usuario_id, uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)
     `).run(
       usuario.usuario_id,
       uuid,
@@ -31,7 +31,8 @@ class Usuarios {
       usuario.email,
       usuario.senha,
       usuario.telefone || null,
-      usuario.tipo_usuario_id
+      usuario.tipo_usuario_id,
+      usuario.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -40,6 +41,14 @@ class Usuarios {
       SELECT * FROM tbl_usuarios WHERE excluido_em IS NULL
     `).all();
   }
+
+  async listarClientes()  {
+    return db.prepare(`
+      SELECT * FROM tbl_usuarios 
+      WHERE excluido_em IS NULL
+    `).all();
+  }
+
 
   async listarPendentes() {
     return db.prepare(`
@@ -81,12 +90,14 @@ class Usuarios {
         email = ?,
         telefone = ?,
         atualizado_em = CURRENT_TIMESTAMP,
+        excluido_em = ?,
         sincronizado_em = 0
       WHERE usuario_id = ?
     `).run(
       usuario.nome,
       usuario.email,
       usuario.telefone,
+      usuario.excluido_em || null,
       usuario.usuario_id
     ).changes;
   }

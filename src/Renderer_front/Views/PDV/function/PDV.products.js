@@ -12,6 +12,7 @@ export class ProductManager {
         await this.loadCategories();
         await this.loadProducts();
         this.setupEventListeners();
+        console.log(this.categories);
     }
 
     async loadCategories() {

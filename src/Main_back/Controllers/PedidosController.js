@@ -31,7 +31,6 @@ class PedidoController {
         if (orderData.customer.isExisting) {
             const userID = parseInt(orderData.customer.usuario_id);
             this.newOrderData = {
-                userExisting: true,
                 usuario_id: userID,
                 tipo_pedido_id: typeOrder,
                 metodo_pagamento_id: paymentMethod,
@@ -45,7 +44,6 @@ class PedidoController {
                 password: orderData.customer.password
             };
             this.newOrderData = {
-                userExisting: false,
                 userData: newUserData,
                 tipo_pedido_id: typeOrder,
                 metodo_pagamento_id: paymentMethod,
@@ -53,7 +51,7 @@ class PedidoController {
                 items: items
             };
             };
-        if (typeOrder == 3) {            
+        if (this.newOrderData.tipo_pedido_id == 3) {            
             this.newOrderData.address = {
                     endereco_id: parseInt(orderData.address.endereco_id),
                     rua: orderData.address.street,
@@ -67,7 +65,7 @@ class PedidoController {
         if (net.isOnline()) {
             try {
                 console.log('Pedido confirmado e enviado para o servidor.', JSON.stringify(this.newOrderData));
-                //await this.api.fetchData('http://localhost:8000/backend/desktop/api/pedidos/newOrderData', 'POST', this.newOrderData);
+                await this.api.fetchData('http://localhost:8000/backend/desktop/api/pedidos/newOrderData', 'POST', this.newOrderData);
                 return {success: true, message: 'Pedido confirmado e enviado para o servidor.'};
 
             } catch (error) {
@@ -77,17 +75,8 @@ class PedidoController {
             }
         }
         else {
-            if (this.newOrderData.userExisting) {
-                return {success: true, message: 'Pedido confirmado localmente.'};
-                
-            } else {
-                const userData = this.newOrderData.userData;
-                const user = await this.userModel.adicionarUsuarioPedido(userData);
-                this.newOrderData.usuario_id = user;
-                await this.model.adicionarPedidoLocal(this.newOrderData);
-
-                
-           }
+            console.warn('Sem conexão com a internet. Pedido salvo localmente para sincronização futura.');
+            
         }
     }
 

@@ -7,7 +7,7 @@ class UsuarioController {
     }
 
     async listar() {
-        return await this.model.listar();
+        return await this.model.listarClientes();
     }
 
     async cadastrarLocalmente(usuario) {

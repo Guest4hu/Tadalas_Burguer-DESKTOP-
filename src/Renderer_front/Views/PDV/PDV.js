@@ -48,6 +48,8 @@ export default class PDV {
   
 
     async handleOrderConfirmation(orderData) {
+        console.log('Dados do pedido recebidos para confirmação:', orderData);
+        console.log(this.checkoutManager.customers);
         // Validation Orderdata
         if (!orderData.customer.isExisting){
             if (orderData.customer.name === '' ||orderData.customer.phone === '' || orderData.customer.DateOfBirth === '' || !orderData.items || orderData.items.length === 0) {
@@ -69,6 +71,11 @@ export default class PDV {
                this.notificacao.notificacaoMensagem('error', 'Nome contém caracteres inválidos.');
                 return;
             }
+            if (orderData.customer.phone == this.checkoutManager.customers.find(c => c.telefone == orderData.customer.phone)?.telefone) {
+                this.notificacao.notificacaoMensagem('error', 'Número de telefone invalido tente outro.');
+                return;
+            }
+            
         }
 
 
@@ -81,14 +88,13 @@ export default class PDV {
                 return;
             }
 
-
-
+        
         await window.ElectronAPI.confirmOrder(orderData);
 
 
         // Display Success Message
         this.notificacao.notificacaoMensagem('success', `Pedido confirmado com sucesso!`);
-
         this.cartManager.clearWithoutConfirmation();
+        this.checkoutManager.closeModal();
     }
 }

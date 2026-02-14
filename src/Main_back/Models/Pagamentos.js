@@ -8,15 +8,16 @@ async adicionar(pagamento) {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_pagamento
-      (pagamento_id, uuid, pedido_id, metodo, status_pagamento_id, valor_total, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, 0)
+      (pagamento_id, uuid, pedido_id, metodo, status_pagamento_id, valor_total, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, ?, 0, ?)
     `).run(
       pagamento.pagamento_id,
       uuid,
       pagamento.pedido_id,
       pagamento.metodo,
       pagamento.status_pagamento_id,
-      pagamento.valor_total
+      pagamento.valor_total,
+      pagamento.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -25,6 +26,7 @@ async adicionar(pagamento) {
       UPDATE tbl_pagamento SET
         pedido_id = ?, metodo = ?, status_pagamento_id = ?, valor_total = ?,
         atualizado_em = CURRENT_TIMESTAMP,
+        excluido_em = ?,
         sincronizado_em = 0
       WHERE pagamento_id = ?
     `).run(
@@ -32,6 +34,7 @@ async adicionar(pagamento) {
       pagamento.metodo,
       pagamento.status_pagamento_id,
       pagamento.valor_total,
+      pagamento.excluido_em || null,
       pagamento.pagamento_id
     ).changes;
   }

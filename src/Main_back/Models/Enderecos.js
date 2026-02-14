@@ -8,8 +8,8 @@ class Enderecos {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_enderecos
-      (endereco_id, uuid, usuario_id, rua, numero, bairro, cidade, estado, cep, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+      (endereco_id, uuid, usuario_id, rua, numero, bairro, cidade, estado, cep, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
     `).run(
       endereco.endereco_id,
       uuid,
@@ -19,7 +19,8 @@ class Enderecos {
       endereco.bairro,
       endereco.cidade,
       endereco.estado,
-      endereco.cep
+      endereco.cep,
+      endereco.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -68,7 +69,8 @@ class Enderecos {
       UPDATE tbl_enderecos SET
         rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, cep = ?,
         atualizado_em = CURRENT_TIMESTAMP,
-        sincronizado_em = 0
+        sincronizado_em = 0,
+        excluido_em = ?
       WHERE endereco_id = ?
     `).run(
       endereco.rua,
@@ -77,6 +79,7 @@ class Enderecos {
       endereco.cidade,
       endereco.estado,
       endereco.cep,
+      endereco.excluido_em || null,
       endereco.endereco_id
     ).changes;
   }

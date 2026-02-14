@@ -10,13 +10,14 @@ class Categorias {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_categoria
-      (id_categoria, uuid, nome, descricao, sincronizado_em)
-      VALUES (?, ?, ?, ?, 0)
+      (id_categoria, uuid, nome, descricao, sincronizado_em, excluido_em)
+      VALUES (?, ?, ?, ?, 0, ?)
     `).run(
       categoria.id_categoria,
       uuid,
       categoria.nome,
-      categoria.descricao
+      categoria.descricao,
+      categoria.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -58,11 +59,13 @@ class Categorias {
       UPDATE tbl_categoria SET
         nome = ?, descricao = ?,
         atualizado_em = CURRENT_TIMESTAMP,
-        sincronizado_em = 0
+        sincronizado_em = 0,
+        excluido_em = ?
       WHERE id_categoria = ?
     `).run(
       categoria.nome,
       categoria.descricao,
+      categoria.excluido_em || null,
       categoria.id_categoria
     ).changes;
   }

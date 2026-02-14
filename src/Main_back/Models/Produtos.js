@@ -8,8 +8,8 @@ class Produtos {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_produtos
-      (produto_id, uuid, nome, descricao, preco, estoque, categoria_id, foto_produto, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)
+      (produto_id, uuid, nome, descricao, preco, estoque, categoria_id, foto_produto, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
     `).run(
       produto.produto_id,
       uuid,
@@ -18,7 +18,8 @@ class Produtos {
       produto.preco,
       produto.estoque,
       produto.categoria_id,
-      produto.foto_produto
+      produto.foto_produto,
+      produto.excluido_em || null
     ).lastInsertRowid;
   }
 
@@ -66,7 +67,7 @@ class Produtos {
       UPDATE tbl_produtos SET
         nome = ?, descricao = ?, preco = ?, estoque = ?, categoria_id = ?, foto_produto = ?,
         atualizado_em = CURRENT_TIMESTAMP,
-        sincronizado_em = 0
+        sincronizado_em = 0, excluido_em = ?
       WHERE produto_id = ?
     `).run(
       produto.nome,
@@ -75,6 +76,7 @@ class Produtos {
       produto.estoque,
       produto.categoria_id,
       produto.foto_produto,
+      produto.excluido_em || null,
       produto.produto_id
     ).changes;
   }

@@ -8,14 +8,15 @@ class ItensPedido {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_itens_pedidos
-      (uuid, pedido_id, produto_id, quantidade, valor_unitario, sincronizado_em)
-      VALUES (?, ?, ?, ?, ?, 0)
+      (uuid, pedido_id, produto_id, quantidade, valor_unitario, sincronizado_em,excluido_em)
+      VALUES (?, ?, ?, ?, ?, 0, ?)
     `).run(
       uuid,
       item.pedido_id,
       item.produto_id,
       item.quantidade,
-      item.valor_unitario
+      item.valor_unitario,
+      item.excluido_em || null
     ).lastInsertRowid;
   }
 
