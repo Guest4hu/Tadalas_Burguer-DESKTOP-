@@ -1,4 +1,5 @@
-
+import { employeeData } from '../../Login/Login.js';
+console.log(employeeData, "Dados do funcionário importados para o layout do PDV.");
 export const Layout = {
     render() {
         return `
@@ -55,7 +56,8 @@ export const Layout = {
                         </div>
                         <div class="cart-info-item">
                             <i class="fa fa-user"></i>
-                            <span>Operador: Admin</span>
+                            <span>Operador: ${employeeData.nome}</span>
+                            <input type="hidden" id="employeeID" value="${employeeData.id}">
                         </div>
                     </div>
                 </div>

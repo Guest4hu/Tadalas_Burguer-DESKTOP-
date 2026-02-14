@@ -79,7 +79,7 @@ class Usuarios {
   async buscarPorEmail(email) {
     return db.prepare(`
       SELECT * FROM tbl_usuarios 
-      WHERE email = ? AND excluido_em IS NULL
+      WHERE email = ? AND excluido_em IS NULL AND tipo_usuario_id < 3
     `).get(email);
   }
 

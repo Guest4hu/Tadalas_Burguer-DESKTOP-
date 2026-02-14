@@ -5,6 +5,7 @@ import { CartManager } from './function/PDV.cart.js';
 import { CheckoutManager } from './function/PDV.checkout.js';
 import notificacao from '../../Services/Notificacao.js';
 
+
 export default class PDV {
     constructor() {
         this.notificacao = new notificacao();
@@ -75,7 +76,7 @@ export default class PDV {
                 this.notificacao.notificacaoMensagem('error', 'Número de telefone invalido tente outro.');
                 return;
             }
-            
+
         }
 
 

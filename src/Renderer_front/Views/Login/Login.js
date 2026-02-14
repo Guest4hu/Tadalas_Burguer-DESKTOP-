@@ -1,9 +1,8 @@
 import Notificacao from "../../Services/Notificacao.js";
-
 export default class Login {
     constructor(){
         this.notificacao = new Notificacao()
-
+        this.employeeData = [];
     }
 
 
@@ -99,25 +98,19 @@ export default class Login {
     }
 
     async validarCredenciais(){
-        window.location.href = (`#PDV`);
-            // const email = document.getElementById('email').value;
-            // const senha = document.querySelector('input[name="senha"]').value;
-            // const dados = {
-            //     email: email,
-            //     senha: senha
-            // };
-            
-            //  try {
-            //      resultado = window.ElectronAPI.fazerLogin(dados);
-            //      if (resultado.sucesso) {
-            //          window.location.href = resultado.redirecionarPara;
-            //      } else {                     
-            //          this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
-            //      }
-
-            //  } catch (error) {
-            //      this.notificacao.notificacaoMensagem('error', 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente mais tarde.');
-            //  }
+        
+            const email = document.getElementById('email').value;
+            const senha = document.querySelector('input[name="senha"]').value;
+            const data = {
+                 email: email,
+                 senha: senha
+             };
+                if (await window.ElectronAPI.checkLogin(data)) {
+                    return window.location.href = (`#PDV`);
+                } else {                     
+                        this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
+                        return
+                  }     
         }
    
     async ativarEventos(){

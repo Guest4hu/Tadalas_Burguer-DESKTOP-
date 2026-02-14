@@ -5,6 +5,8 @@ import { initDatabase } from './Main_back/Database/db.js';
 import APIFetch from './Main_back/Services/APIFetch.js';
 
 
+
+
 // Importação dos Controller
 import ProdutosController from './Main_back/Controllers/ProdutosController.js'
 import UsuariosController from './Main_back/Controllers/UsuariosController.js'
@@ -15,6 +17,10 @@ import EnderecoController from './Main_back/Controllers/EnderecosController.js';
 import CategoriaController from './Main_back/Controllers/CategoriasController.js';
 import PedidoController from './Main_back/Controllers/PedidosController.js';
 import Dominio from './Main_back/Controllers/DominioController.js';
+import { clear } from 'node:console';
+
+
+
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -68,10 +74,11 @@ app.whenReady().then(() => {
   createWindow();
   initDatabase();
 
-  ipcMain.handle('fazer-login', async (event, dados) => {
-    const resultado = await controllerLogin.validarCredenciais(dados.email, dados.senha);
-    return resultado;
+  ipcMain.handle('authenticated',() => {
+    return controllerLogin.isAuthenticated();
   });
+
+
 
   ipcMain.handle('enviar-codigo-recuperacao', async (event, email) => {
     const resultado = await controllerLogin.enviarCodigoRecuperacao(email);
@@ -98,14 +105,23 @@ app.whenReady().then(() => {
     return adressData
    })
 
-ipcMain.handle('getcepaddress', async (event, cepInput) =>{
-    console.log("Chamando searchCEP...");
-    return await controllerEnderecos.searchCEP(cepInput);
-})
+    ipcMain.handle('getcepaddress', async (event, cepInput) =>{
+        console.log("Chamando searchCEP...");
+        return await controllerEnderecos.searchCEP(cepInput);
+    })
 
-ipcMain.handle('confirm-order', async (event, orderData) => {
-    await controllerPedidos.confirmarPedido(orderData);
-});
+    ipcMain.handle('confirm-order', async (event, orderData) => {
+        await controllerPedidos.confirmarPedido(orderData);
+    });
+
+    ipcMain.handle('fazer-login', async (event, dados) => {
+      return await controllerLogin.validarCredenciais(dados.email, dados.senha);
+    })
+
+    ipcMain.handle('get-employe-data', async () => {
+      const employeData = await controllerLogin.getLoggedEmployeeData();
+      return employeData;
+     })
 
 
 async function sincronizarSeOnline() {

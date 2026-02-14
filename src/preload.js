@@ -6,13 +6,15 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld(
     'ElectronAPI', {
-        fazerLogin: (dados) => ipcRenderer.invoke('fazer-login', dados),
         enviarCodigoRecuperacao: (email) => ipcRenderer.invoke('enviar-codigo-recuperacao', email),
+        authenticated: () => ipcRenderer.invoke('authenticated'),
         getProducts: async () => ipcRenderer.invoke('get-products'),
         getCategories: async () => ipcRenderer.invoke('get-categories'),
         getUserData: async () => ipcRenderer.invoke('get-user-data'),
         getAdressData: async () => ipcRenderer.invoke('get-adress-data'),
         getCEPaddress: async (cepInput) => ipcRenderer.invoke('getcepaddress', cepInput),
-        confirmOrder: async (orderData) => ipcRenderer.invoke('confirm-order', orderData)
+        confirmOrder: async (orderData) => ipcRenderer.invoke('confirm-order', orderData),
+        checkLogin: async (dados) => ipcRenderer.invoke('fazer-login', dados),
+        getEmployeData: async () => ipcRenderer.invoke('get-employe-data')
     },
 )

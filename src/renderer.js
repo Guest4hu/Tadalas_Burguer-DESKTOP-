@@ -45,4 +45,4 @@ window.addEventListener('hashchange', async () => {
     await navegarPara(rota)
 })
 
-navegarPara('/PDV')
+navegarPara('/Login')
