@@ -65,7 +65,7 @@ export class CheckoutManager {
     resetForms() {
         // Clear inputs
         const fields = ['receivedAmount', 'customerName', 'customerPhone','customerPassword','customerConfirmPassword', 'addressStreet',"addressID",
-            'addressNumber', 'addressComplement', 'addressNeighborhood',
+            'addressNumber', 'addressComplement', 'addressNeighborhood','addressID',
             'addressZipCode', 'addressReference', 'orderNotes', 'customerSearchInput'];
 
         fields.forEach(id => {
@@ -255,7 +255,9 @@ export class CheckoutManager {
 
         // Address Info
         if (this.orderType === '3') {
+            const addressID = document.getElementById('addressID')?.value;
             data.address = {
+                endereco_id: addressID || null,
                 street: document.getElementById('addressStreet')?.value,
                 number: document.getElementById('addressNumber')?.value,
                 neighborhood: document.getElementById('addressNeighborhood')?.value,
@@ -266,7 +268,7 @@ export class CheckoutManager {
         }
 
         return data;
-    }
+}
 
     // ==================== LISTENERS ====================
     setupEventListeners() {

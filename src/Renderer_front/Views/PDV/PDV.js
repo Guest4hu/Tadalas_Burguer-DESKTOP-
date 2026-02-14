@@ -47,15 +47,15 @@ export default class PDV {
 
   
 
-    handleOrderConfirmation(orderData) {
-        console.log('Dados do pedido recebidos para confirmação:', orderData);
+    async handleOrderConfirmation(orderData) {
         // Validation Orderdata
+        if (!orderData.customer.isExisting){
             if (orderData.customer.name === '' ||orderData.customer.phone === '' || orderData.customer.DateOfBirth === '' || !orderData.items || orderData.items.length === 0) {
                 this.notificacao.notificacaoMensagem('error', 'Dados do pedido incompletos. Verifique as informações e tente novamente.');
                 return;
             }
 
-            console.log(orderData.customer.phone.length)
+            
             if(orderData.customer.phone.length  < 10) {
                 this.notificacao.notificacaoMensagem('error', 'Número de telefone inválido. Verifique as informações e tente novamente.');
                 return;
@@ -68,7 +68,8 @@ export default class PDV {
             if (!this.nomeValido(orderData.customer.name)) {
                this.notificacao.notificacaoMensagem('error', 'Nome contém caracteres inválidos.');
                 return;
-}
+            }
+        }
 
 
 
@@ -82,8 +83,7 @@ export default class PDV {
 
 
 
-
-        // Display Success Message
+        await window.ElectronAPI.confirmOrder(orderData);
 
 
         // Display Success Message

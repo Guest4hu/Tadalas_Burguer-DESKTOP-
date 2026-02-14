@@ -103,6 +103,10 @@ ipcMain.handle('getcepaddress', async (event, cepInput) =>{
     return await controllerEnderecos.searchCEP(cepInput);
 })
 
+ipcMain.handle('confirm-order', async (event, orderData) => {
+    await controllerPedidos.confirmarPedido(orderData);
+});
+
 
 async function sincronizarSeOnline() {
   console.log('[Main]' );

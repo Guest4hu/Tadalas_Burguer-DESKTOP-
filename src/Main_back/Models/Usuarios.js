@@ -2,6 +2,20 @@ import db from '../Database/db.js';
 import crypto from 'node:crypto';
 
 class Usuarios {
+  async adicionarUsuarioPedido(usuario) {
+    const uuid = crypto.randomUUID();
+    return db.prepare(`
+      INSERT OR IGNORE INTO tbl_usuarios
+      ( uuid, nome, senha, telefone, tipo_usuario_id, sincronizado_em)
+      VALUES ( ?, ?, ?, ?, 1 , 0)
+    `).run(
+      uuid,
+      usuario.nome,
+      usuario.password,
+      usuario.telefone || null,
+    ).lastInsertRowid;
+  }
+
 
   async adicionar(usuario) {
     const uuid = crypto.randomUUID();

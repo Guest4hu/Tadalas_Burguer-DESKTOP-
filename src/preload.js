@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld(
         getCategories: async () => ipcRenderer.invoke('get-categories'),
         getUserData: async () => ipcRenderer.invoke('get-user-data'),
         getAdressData: async () => ipcRenderer.invoke('get-adress-data'),
-        getCEPaddress: async (cepInput) => ipcRenderer.invoke('getcepaddress', cepInput)
+        getCEPaddress: async (cepInput) => ipcRenderer.invoke('getcepaddress', cepInput),
+        confirmOrder: async (orderData) => ipcRenderer.invoke('confirm-order', orderData)
     },
 )

@@ -20,7 +20,7 @@ class APIFetch {
     this.usuarioModel = new UsuarioModel();
   }
 
-  async fetchData(url, method = 'GET') {
+  async fetchData(url, method = 'GET' , dados = null){
     if (!net.isOnline()){
       return {sucess: false, message:"Sem conexão com a internet"};
     }
@@ -28,8 +28,12 @@ class APIFetch {
         method: method,
         cache: "no-store",
         headers:{
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.chave}`
         }
+      }
+      if (dados) {
+        config.body = JSON.stringify(dados);
       }
       const response = await fetch(url, config)
       const data = await response.json();
