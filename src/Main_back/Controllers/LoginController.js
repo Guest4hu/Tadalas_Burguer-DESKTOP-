@@ -15,12 +15,9 @@ class LoginController{
             return false
         }
     }
-
     async getLoggedEmployeeData() {
         return this.employeeData;
     }
-    
-
     async validarCredenciais(email, senha) {
         this.employeeData = [];
         if (net.isOnline()){
@@ -31,9 +28,6 @@ class LoginController{
                 return { success: true, message: 'Login realizado com sucesso.'};
             }
         } 
-        
-            
-
         const usuario = await this.usuarioModel.buscarPorEmail(email);
         console.log(usuario, "Usuario encontrado no banco de dados.");
         if (!usuario) {
