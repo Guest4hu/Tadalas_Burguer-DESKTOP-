@@ -1,6 +1,7 @@
 
 export const Layout = {
     render() {
+        const employeeData = JSON.parse(sessionStorage.getItem('employeeData'));
         return `
         <!-- Window Chrome -->
         <div class="window-chrome">
@@ -55,8 +56,8 @@ export const Layout = {
                         </div>
                         <div class="cart-info-item">
                             <i class="fa fa-user"></i>
-                            <span>Operador: </span>
-                            <input type="hidden" id="employeeID" value="">
+                            <span>Operador: ${employeeData.nome}</span>
+                            <input type="hidden" id="employeeID" value="${employeeData.id}">
                         </div>
                     </div>
                 </div>

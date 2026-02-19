@@ -105,7 +105,10 @@ export default class Login {
                  email: email,
                  senha: senha
              };
-                if (await window.ElectronAPI.checkLogin(data)) {
+                const dados = await window.ElectronAPI.checkLogin(data)
+                console.log(dados, "Dados retornados da função de login");
+                if(dados.success) {
+                    sessionStorage.setItem('employeeData', JSON.stringify(dados.usuario));
                     return window.location.href = (`#PDV`);
                 } else {                     
                         this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
