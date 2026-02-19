@@ -16,24 +16,22 @@ class LoginController{
         }
     }
 
-    async getLoggedEmployeeData() {
+    async getLoggedEmployeData() {
         return this.employeeData;
     }
     
 
     async validarCredenciais(email, senha) {
         this.employeeData = [];
-        if (net.isOnline()){
-            const resultado = await this.api.fetchData(`http://localhost:8000/backend/desktop/api/login`, 'POST' , {email, senha});
-            if (resultado.sucess) {          
-                const userData = JSON.parse(JSON.stringify(resultado));
-                this.employeeData = userData;
-                return { success: true, message: 'Login realizado com sucesso.'};
-            }
-        } 
+        //  if (!net.isOnline()){
+        //      const resultado = await this.api.fetchData(`http://localhost:8000/backend/desktop/api/login`, 'POST' , {email, senha});
+        //      if (resultado.sucess) {          
+        //          const userData = JSON.parse(JSON.stringify(resultado));
+        //          this.employeeData = userData;
+        //          return { success: true, message: 'Login realizado com sucesso.'};
+        //      }
+        // } 
         
-            
-
         const usuario = await this.usuarioModel.buscarPorEmail(email);
         console.log(usuario, "Usuario encontrado no banco de dados.");
         if (!usuario) {

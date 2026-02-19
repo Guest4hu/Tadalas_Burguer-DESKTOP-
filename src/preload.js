@@ -15,6 +15,6 @@ contextBridge.exposeInMainWorld(
         getCEPaddress: async (cepInput) => ipcRenderer.invoke('getcepaddress', cepInput),
         confirmOrder: async (orderData) => ipcRenderer.invoke('confirm-order', orderData),
         checkLogin: async (dados) => ipcRenderer.invoke('fazer-login', dados),
-        getEmployeData: async () => ipcRenderer.invoke('get-employe-data')
+        getEmployeData: async () => ipcRenderer.invoke('get-employee-data')
     },
 )

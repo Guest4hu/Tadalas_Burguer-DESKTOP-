@@ -1,7 +1,9 @@
-import { employeeData } from '../../Login/Login.js';
-console.log(employeeData, "Dados do funcionário importados para o layout do PDV.");
-export const Layout = {
+    export const Layout = {
     render() {
+        const employeeData = {
+            nome: JSON.parse(sessionStorage.getItem('nome')),
+            usuario_id: JSON.parse(sessionStorage.getItem('usuario_id'))
+        };
         return `
         <!-- Window Chrome -->
         <div class="window-chrome">

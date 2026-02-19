@@ -104,8 +104,14 @@ export default class Login {
             const data = {
                  email: email,
                  senha: senha
-             };
-                if (await window.ElectronAPI.checkLogin(data)) {
+                };
+                const dados = await window.ElectronAPI.checkLogin(data)
+                if (dados.success) {
+                    console.log(dados.usuario, "Dados do usuário retornados após validação de credenciais.");
+                    const employeeData = dados.usuario;
+                    sessionStorage.setItem('nome', JSON.stringify(employeeData.nome));
+                    sessionStorage.setItem('usuario_id', JSON.stringify(employeeData.usuario_id));
+                    console.log(employeeData, "Dados do funcionário recebidos após login bem-sucedido.");
                     return window.location.href = (`#PDV`);
                 } else {                     
                         this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");
@@ -118,7 +124,7 @@ export default class Login {
         // função para o botão de enviar o formulário de login
         const botaoEnviar = document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            this.validarCredenciais();
+           await this.validarCredenciais();
         });
 
     }

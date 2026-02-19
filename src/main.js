@@ -119,7 +119,7 @@ app.whenReady().then(() => {
     })
 
     ipcMain.handle('get-employe-data', async () => {
-      const employeData = await controllerLogin.getLoggedEmployeeData();
+      const employeData = await controllerLogin.getLoggedEmployeData();
       return employeData;
      })
 
