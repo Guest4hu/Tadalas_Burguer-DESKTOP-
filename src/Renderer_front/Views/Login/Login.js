@@ -7,25 +7,13 @@ export default class Login {
 
 
     async renderizar(){
-         return `<div class="window-chrome">
-        <div class="window-controls">
-            <div class="window-btn close"></div>
-            <div class="window-btn minimize"></div>
-            <div class="window-btn maximize"></div>
-        </div>
-        <div class="window-title">
-            <i class="fa fa-cutlery"></i>
-            Tadala Burger - Autenticação
-        </div>
-        <div style="width: 52px;"></div>
-    </div>
-
+         return `
     <div class="auth-shell">
         <!-- Sidebar -->
         <div class="auth-sidebar">
             <div class="sidebar-content">
                 <div class="sidebar-logo">
-                    <i class="fa fa-cutlery"></i>
+                    <img src="./src/assets/icon/logoTadalas.png" alt="Logo Tadala Burger" class="logo-image">
                 </div>
                 <h1>Tadala Burger</h1>
                 <p>Os melhores hambúrgueres artesanais da cidade. Peça agora e receba quentinho em casa!</p>

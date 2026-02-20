@@ -1,9 +1,12 @@
-import { app, BrowserWindow, ipcMain,net } from 'electron';
-import path from 'node:path';
-import started from 'electron-squirrel-startup';
+import { app, BrowserWindow, ipcMain, net, Menu } from 'electron';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import { initDatabase } from './Main_back/Database/db.js';
 import APIFetch from './Main_back/Services/APIFetch.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 
@@ -24,10 +27,6 @@ import { clear } from 'node:console';
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (started) {
-  app.quit();
-}
-
 
 // Puxando as variáveis do Controller
 const controllerDominio = new Dominio()
@@ -43,29 +42,33 @@ const controllerPedidos = new PedidoController()
 
 
 
-const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: "100%",
-    height: "100%",
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    frame: false, // 🔥 REMOVE BARRA PADRÃO
+    backgroundColor: '#121212',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      contextIsolation: true
-    },
-    icon: path.join(__dirname, '../assets/icon/logoTadala.ico'),
+      contextIsolation: true,
+      nodeIntegration: false
+    }
   });
 
-  // and load the index.html of the app.
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  // 🔥 REMOVE MENU PADRÃO
+  Menu.setApplicationMenu(null);
+
+  const isDev = !app.isPackaged;
+
+  if (isDev) {
+    win.loadURL('http://localhost:5173');
+    win.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    win.loadFile(path.join(__dirname, '../dist/index.html'));
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-};
+  return win;
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -74,6 +77,29 @@ app.whenReady().then(() => {
   
   createWindow();
   initDatabase();
+
+  ipcMain.on('window-minimize', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.minimize();
+});
+
+ipcMain.on('window-maximize', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win.isMaximized()) {
+    win.unmaximize();
+  } else {
+    win.maximize();
+  }
+});
+
+ipcMain.on('window-close', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  win.close();
+});
+
+
+
+
 
   ipcMain.handle('authenticated',() => {
     return controllerLogin.isAuthenticated();

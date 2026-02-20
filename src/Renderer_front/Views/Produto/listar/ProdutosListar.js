@@ -1,4 +1,4 @@
-import ProdutosView from "../ProdutosView";
+import ProdutosView from "../ProdutosView.js";
 
 class ProdutosListar{
     constructor(){

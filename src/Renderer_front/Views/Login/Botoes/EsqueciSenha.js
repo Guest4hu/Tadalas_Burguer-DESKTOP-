@@ -1,4 +1,4 @@
-import Notificacao from "../../../Services/Notificacao";
+import Notificacao from "../../../Services/Notificacao.js";
 class EsqueciSenha {
     constructor(){
         this.notificacao = new Notificacao()

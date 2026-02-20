@@ -6,9 +6,38 @@
     <link rel="stylesheet" href="./src/Renderer_front/assets/css/style.css" />
   </head>
   <body>
-    <main>
-      <div id="app">Tadala</div>
-    </main>
-    <script type="module" src="/src/renderer.js"></script>
+
+  <!-- 🔥 BARRA CUSTOM -->
+  <div class="window-chrome">
+    <div class="window-title">
+      <img src="./src/assets/icon/logoTadalas.png" alt="Logo" style="width:22px;height:22px;object-fit:contain;border-radius:4px;" />
+      Tadalas Burguer
+    </div>
+
+    <div class="window-controls">
+      <div class="window-btn minimize" title="Minimizar">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </div>
+      <div class="window-btn maximize" title="Maximizar">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </div>
+      <div class="window-btn close" title="Fechar">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </div>
+    </div>
+  </div>  <!-- ← ESTA TAG ESTAVA FALTANDO! -->
+
+  <main class="auth-shell">
+    <div id="app">Tadala</div>
+  </main>
+
+  <script type="module" src="./src/renderer.js"></script>
+
+  <script>
+    document.querySelector('.window-btn.close').addEventListener('click', () => window.ElectronAPI.close());
+    document.querySelector('.window-btn.minimize').addEventListener('click', () => window.ElectronAPI.minimize());
+    document.querySelector('.window-btn.maximize').addEventListener('click', () => window.ElectronAPI.maximize());
+  </script>
+
   </body>
 </html>

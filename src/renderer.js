@@ -27,7 +27,7 @@
  */
 
 import './index.css';
-import Rotas from './Renderer_front/Services/Rotas'
+import Rotas from './Renderer_front/Services/Rotas.js'
 
 
 const rota_mapeada = new Rotas()

@@ -1,8 +1,8 @@
-import ProdutosView from "../ProdutosView";
+import ProdutosView from "../ProdutosView.js";
 
 class ProdutosForm {
     constructor(){
-        this.view = new ProdutosView
+        this.view = new ProdutosView()
     }
 
     renderizarFormulario(){

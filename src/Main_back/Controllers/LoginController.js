@@ -1,7 +1,7 @@
-import Usuarios from "../Models/Usuarios"
+import Usuarios from "../Models/Usuarios.js"
 import bcrypt from "bcryptjs";
 import APIFetch from "../Services/APIFetch.js";
-import { net } from "electron";
+
 
 class LoginController{
     constructor() {
