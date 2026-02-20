@@ -1,11 +1,18 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const { AutoUnpackNativesPlugin } = require('@electron-forge/plugin-auto-unpack-natives');
 
 module.exports = {
-  packagerConfig: {
-    asar: true,
-    icon: './src/assets/icon/logoTadala',
-  },
+ packagerConfig: {
+  asar: true,
+  prune: false,
+  icon: './src/assets/icon/logoTadala',
+  ignore: [
+    /^\/src$/,
+    /^\/out$/,
+    /^\/\.git$/,
+  ],
+},
 
   rebuildConfig: {},
 
@@ -31,6 +38,8 @@ module.exports = {
   ],
 
   plugins: [
+    new AutoUnpackNativesPlugin({}),
+
     {
       name: '@electron-forge/plugin-vite',
       config: {
@@ -61,8 +70,8 @@ module.exports = {
       [FuseV1Options.EnableCookieEncryption]: true,
       [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false,
       [FuseV1Options.EnableNodeCliInspectArguments]: false,
-      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
-      [FuseV1Options.OnlyLoadAppFromAsar]: true,
+      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: false,
+      [FuseV1Options.OnlyLoadAppFromAsar]: false,
     }),
   ],
 };

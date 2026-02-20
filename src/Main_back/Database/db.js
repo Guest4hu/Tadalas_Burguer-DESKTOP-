@@ -1,4 +1,7 @@
-import Database from 'better-sqlite3';
+// IMPORTANTE: better-sqlite3 é um módulo nativo (.node).
+// Deve ser carregado com require() para que o Vite não tente empacotá-lo.
+// O Vite respeita require() dinâmico como external e o Electron resolve em runtime.
+const Database = require('better-sqlite3');
 import { app } from 'electron';
 import path from 'node:path';
 //                        no explore %appdata%
@@ -202,7 +205,7 @@ CREATE TABLE IF NOT EXISTS tbl_itens_pedidos (
 );
 
 `
-);
+  );
 
 }
 
