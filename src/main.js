@@ -53,6 +53,7 @@ const createWindow = () => {
       nodeIntegration: false,
       contextIsolation: true
     },
+    icon: path.join(__dirname, '../assets/icon/logoTadala.ico'),
   });
 
   // and load the index.html of the app.

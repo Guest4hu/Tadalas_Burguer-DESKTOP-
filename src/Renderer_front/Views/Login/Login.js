@@ -104,14 +104,11 @@ export default class Login {
             const data = {
                  email: email,
                  senha: senha
-                };
+             };
                 const dados = await window.ElectronAPI.checkLogin(data)
-                if (dados.success) {
-                    console.log(dados.usuario, "Dados do usuário retornados após validação de credenciais.");
-                    const employeeData = dados.usuario;
-                    sessionStorage.setItem('nome', JSON.stringify(employeeData.nome));
-                    sessionStorage.setItem('usuario_id', JSON.stringify(employeeData.usuario_id));
-                    console.log(employeeData, "Dados do funcionário recebidos após login bem-sucedido.");
+                console.log(dados, "Dados retornados da função de login");
+                if(dados.success) {
+                    sessionStorage.setItem('employeeData', JSON.stringify(dados.usuario));
                     return window.location.href = (`#PDV`);
                 } else {                     
                         this.notificacao.notificacaoMensagem('error', "Credenciais inválidas. Por favor, verifique seu email e senha e tente novamente.");

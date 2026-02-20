@@ -22,7 +22,7 @@ class Usuarios {
 
     return db.prepare(`
       INSERT OR IGNORE INTO tbl_usuarios
-      (usuario_id, uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em,excluido_em)
+      (usuario_id, uuid, nome, email, senha, telefone, tipo_usuario_id, sincronizado_em,excluido_em )
       VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?)
     `).run(
       usuario.usuario_id,
@@ -91,13 +91,15 @@ class Usuarios {
         telefone = ?,
         atualizado_em = CURRENT_TIMESTAMP,
         excluido_em = ?,
-        sincronizado_em = 0
+        sincronizado_em = 0,
+        tipo_usuario_id = ?
       WHERE usuario_id = ?
     `).run(
       usuario.nome,
       usuario.email,
       usuario.telefone,
       usuario.excluido_em || null,
+      usuario.tipo_usuario_id,
       usuario.usuario_id
     ).changes;
   }

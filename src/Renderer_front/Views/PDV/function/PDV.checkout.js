@@ -34,7 +34,7 @@ export class CheckoutManager {
     async loadCustomers() {
         try {
             const users = await window.ElectronAPI.getUserData();
-            this.customers = users.filter(user => user.tipo_usuario_id === 3);
+            this.customers = users.filter(user => user.tipo_usuario_id == 3);
         } catch (error) {
             console.error('Erro ao carregar clientes:', error);
             this.customers = [];

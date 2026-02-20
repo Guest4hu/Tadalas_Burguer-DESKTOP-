@@ -1,9 +1,7 @@
-    export const Layout = {
+
+export const Layout = {
     render() {
-        const employeeData = {
-            nome: JSON.parse(sessionStorage.getItem('nome')),
-            usuario_id: JSON.parse(sessionStorage.getItem('usuario_id'))
-        };
+        const employeeData = JSON.parse(sessionStorage.getItem('employeeData'));
         return `
         <!-- Window Chrome -->
         <div class="window-chrome">
