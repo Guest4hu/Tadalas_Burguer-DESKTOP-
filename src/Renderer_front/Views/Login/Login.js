@@ -1,4 +1,6 @@
 import Notificacao from "../../Services/Notificacao.js";
+import logoTadalas from "../../../assets/icon/logoTadalas.png";
+
 export default class Login {
     constructor(){
         this.notificacao = new Notificacao()
@@ -13,7 +15,7 @@ export default class Login {
         <div class="auth-sidebar">
             <div class="sidebar-content">
                 <div class="sidebar-logo">
-                    <img src="./src/assets/icon/logoTadalas.png" alt="Logo Tadala Burger" class="logo-image">
+                    <img src="${logoTadalas}" alt="Logo Tadala Burger" class="logo-image">
                 </div>
                 <h1>Tadala Burger</h1>
                 <p>Os melhores hambúrgueres artesanais da cidade. Peça agora e receba quentinho em casa!</p>
