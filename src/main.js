@@ -97,15 +97,9 @@ ipcMain.on('window-close', (event) => {
   win.close();
 });
 
-
-
-
-
-  ipcMain.handle('authenticated',() => {
+ipcMain.handle('authenticated',() => {
     return controllerLogin.isAuthenticated();
   });
-
-
 
   ipcMain.handle('enviar-codigo-recuperacao', async (event, email) => {
     const resultado = await controllerLogin.enviarCodigoRecuperacao(email);

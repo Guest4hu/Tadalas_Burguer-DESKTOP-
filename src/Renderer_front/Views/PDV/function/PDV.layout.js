@@ -3,19 +3,6 @@ export const Layout = {
     render() {
         const employeeData = JSON.parse(sessionStorage.getItem('employeeData'));
         return `
-        <!-- Window Chrome -->
-        <div class="window-chrome">
-            <div class="window-title">
-                <i class="fa fa-shopping-cart"></i>
-                PDV - Ponto de Vendas
-            </div>
-            <div class="window-controls">
-                <div class="window-btn close"></div>
-                <div class="window-btn minimize"></div>
-                <div class="window-btn maximize"></div>
-            </div>
-        </div>
-
         <!-- Main Container -->
         <div class="pdv-container">
             <!-- Left Panel - Products -->
