@@ -1,4 +1,7 @@
 import { net } from 'electron';
+import { app } from 'electron';
+import path from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
 import CategoriaModel from '../Models/Categorias.js';
 import EnderecoModel from '../Models/Enderecos.js';
 import ItemPedidoModel from '../Models/ItensPedidos.js';
@@ -7,10 +10,43 @@ import PedidoModel from '../Models/Pedidos.js';
 import ProdutoModel from '../Models/Produtos.js';
 import UsuarioModel from '../Models/Usuarios.js';
 
+// Carrega variáveis de ambiente do arquivo .env
+function loadEnvVariables() {
+  const isDev = !app.isPackaged;
+  const envPath = isDev 
+    ? path.join(process.cwd(), '.env')
+    : path.join(path.dirname(app.getPath('exe')), '.env');
+  
+  if (existsSync(envPath)) {
+    const envContent = readFileSync(envPath, 'utf-8');
+    envContent.split('\n').forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && !trimmedLine.startsWith('#')) {
+        const [key, ...valueParts] = trimmedLine.split('=');
+        const value = valueParts.join('=').trim();
+        if (key && value) {
+          process.env[key.trim()] = value;
+        }
+      }
+    });
+  } else {
+    console.warn('[APIFetch] Arquivo .env não encontrado. Usando valores padrão.');
+  }
+}
+
+loadEnvVariables();
+
 class APIFetch {
   constructor(){
-    this.chave = '5d242b5294d72df332ca2c492d2c0b9b'
-    this.urlBase = `http://localhost:8000/backend/desktop/api`
+    // Carrega credenciais de variáveis de ambiente (SEGURO)
+    this.chave = process.env.API_KEY || '';
+    this.urlBase = process.env.API_BASE_URL || 'http://localhost:8000/backend/desktop/api';
+    
+    // Validação de segurança
+    if (!this.chave) {
+      console.error('[SEGURANÇA] API_KEY não configurada! Configure no arquivo .env');
+    }
+    
     this.categoriaModel = new CategoriaModel();
     this.enderecoModel = new EnderecoModel();
     this.itemPedidoModel = new ItemPedidoModel();
