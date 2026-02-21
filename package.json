@@ -1,6 +1,6 @@
 {
-  "name": "desk",
-  "productName": "Desk",
+  "name": "tadala-burguer",
+  "productName": "Tadala Burguer",
   "version": "1.0.0",
   "main": "src/main.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "build": {
     "appId": "com.tadalas.desk",
-    "productName": "Desk",
+    "productName": "Tadala Burguer Desk",
     "directories": {
       "output": "release"
     },

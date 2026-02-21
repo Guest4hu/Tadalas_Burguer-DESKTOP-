@@ -78,10 +78,6 @@ export default class Login {
                         Entrar
                     </button>
                 </form>
-                
-                <div class="links-container">
-                    <a href="#EsqueciSenha">Esqueci a senha</a>
-                </div>
             </div>
         </div>
         </div>`

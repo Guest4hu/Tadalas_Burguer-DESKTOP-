@@ -1,7 +1,7 @@
 import { net } from 'electron';
 import { app } from 'electron';
 import path from 'node:path';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import CategoriaModel from '../Models/Categorias.js';
 import EnderecoModel from '../Models/Enderecos.js';
 import ItemPedidoModel from '../Models/ItensPedidos.js';
@@ -13,24 +13,72 @@ import UsuarioModel from '../Models/Usuarios.js';
 // Carrega variáveis de ambiente do arquivo .env
 function loadEnvVariables() {
   const isDev = !app.isPackaged;
-  const envPath = isDev 
-    ? path.join(process.cwd(), '.env')
-    : path.join(path.dirname(app.getPath('exe')), '.env');
   
-  if (existsSync(envPath)) {
-    const envContent = readFileSync(envPath, 'utf-8');
-    envContent.split('\n').forEach(line => {
-      const trimmedLine = line.trim();
-      if (trimmedLine && !trimmedLine.startsWith('#')) {
-        const [key, ...valueParts] = trimmedLine.split('=');
-        const value = valueParts.join('=').trim();
-        if (key && value) {
-          process.env[key.trim()] = value;
+  // Lista de caminhos possíveis para o .env (em ordem de prioridade)
+  const possiblePaths = isDev 
+    ? [
+        path.join(process.cwd(), '.env'),
+      ]
+    : [
+        // 1. Junto ao executável (pasta de instalação)
+        path.join(path.dirname(app.getPath('exe')), '.env'),
+        // 2. Na pasta de dados do usuário (%APPDATA%/Desk)
+        path.join(app.getPath('userData'), '.env'),
+        // 3. Dentro do pacote ASAR (resources)
+        path.join(process.resourcesPath, '.env'),
+        // 4. Uma pasta acima do exe (algumas instalações NSIS)
+        path.join(path.dirname(app.getPath('exe')), '..', '.env'),
+      ];
+  
+  let envPath = null;
+  
+  // Tenta encontrar o .env em um dos caminhos possíveis
+  for (const testPath of possiblePaths) {
+    console.log(`[ENV] Verificando: ${testPath}`);
+    if (existsSync(testPath)) {
+      envPath = testPath;
+      console.log(`[ENV] Arquivo .env encontrado em: ${envPath}`);
+      break;
+    }
+  }
+  
+  if (envPath) {
+    try {
+      const envContent = readFileSync(envPath, 'utf-8');
+      envContent.split('\n').forEach(line => {
+        const trimmedLine = line.trim();
+        if (trimmedLine && !trimmedLine.startsWith('#')) {
+          const [key, ...valueParts] = trimmedLine.split('=');
+          const value = valueParts.join('=').trim();
+          if (key && value) {
+            process.env[key.trim()] = value;
+          }
         }
-      }
-    });
+      });
+      console.log('[ENV] Variáveis de ambiente carregadas com sucesso!');
+    } catch (error) {
+      console.error('[ENV] Erro ao ler arquivo .env:', error.message);
+    }
   } else {
-    console.warn('[APIFetch] Arquivo .env não encontrado. Usando valores padrão.');
+    console.warn('[ENV] Arquivo .env não encontrado em nenhum dos caminhos.');
+    console.warn('[ENV] Caminhos verificados:', possiblePaths);
+    
+    // Em produção, cria um .env de exemplo na pasta userData para o usuário configurar
+    if (!isDev) {
+      const userDataEnvPath = path.join(app.getPath('userData'), '.env');
+      const envTemplate = `# Configuração Tadalas Burguer
+# Cole sua chave de API abaixo:
+API_KEY=sua_chave_api_aqui
+API_BASE_URL=http://localhost:8000/backend/desktop/api
+`;
+      try {
+        writeFileSync(userDataEnvPath, envTemplate, 'utf-8');
+        console.log(`[ENV] Arquivo .env de exemplo criado em: ${userDataEnvPath}`);
+        console.log('[ENV] Por favor, edite este arquivo e adicione sua API_KEY');
+      } catch (err) {
+        console.error('[ENV] Não foi possível criar .env:', err.message);
+      }
+    }
   }
 }
 
