@@ -3,6 +3,8 @@
 Sistema de Ponto de Venda (PDV) desktop para hamburgueria artesanal, desenvolvido com **Electron**, **Vite** e **SQLite**.
 
 
+
+Tadala Burguer
 Version 1.0
 
 ---
