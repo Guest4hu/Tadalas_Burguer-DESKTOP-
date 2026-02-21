@@ -17,8 +17,19 @@ class EnderecoController {
     }
 
     async cadastrarLocalmente(endereco) {
+        // Validação de segurança
+        if (!endereco || !endereco.sucess || !endereco.dados?.dados) {
+            console.warn('[Enderecos] Dados inválidos:', endereco?.message || 'sem resposta');
+            return;
+        }
 
-        for (const element of endereco.dados) {
+        const itens = endereco.dados.dados;
+        if (!Array.isArray(itens) || itens.length === 0) {
+            console.warn('[Enderecos] Nenhum endereço para cadastrar');
+            return;
+        }
+
+        for (const element of itens) {
             if (await this.model.buscarPorID(element.endereco_id) === true) {
                 console.log(`Endereço com ID ${element.endereco_id} já existe. Atualizando...`);
                 await this.model.atualizar(element);

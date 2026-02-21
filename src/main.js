@@ -146,55 +146,55 @@ ipcMain.handle('authenticated',() => {
 
 
 async function sincronizarSeOnline() {
-  console.log('[Main]' );
+  console.log('[Main] Verificando conexão...');
   const isOnline = net.isOnline();
-  if (isOnline) {
-    console.log('[Main] Aplicativo iniciado com internet. Iniciando sincronização automática...');
-  const dominioStatusPedido = await APIFetch.sincronizarDados('dominioStatusPedido');
-  const dominioTipoUsuario = await APIFetch.sincronizarDados('dominioTipoUsuario');
-  const dominioTipoPedido = await APIFetch.sincronizarDados('dominioTipoPedido');
-  const dominioStatusPagamento = await APIFetch.sincronizarDados('dominioStatusPagamento');
-  const dominioMetodoPagamento = await APIFetch.sincronizarDados('dominioMetodoPagamento');
-  const categorias = await APIFetch.sincronizarDados('categorias');
-  const produtos = await APIFetch.sincronizarDados('produtos');
-  const usuarios = await APIFetch.sincronizarDados('usuarios');
-  const pedidos = await APIFetch.sincronizarDados('pedidos');
-  const enderecos = await APIFetch.sincronizarDados('enderecos');
-
-   //===== DOMINIOS =====
-  await controllerDominio.cadastrarLocalmente(dominioStatusPedido, 'statusPedido');
-  await controllerDominio.cadastrarLocalmente(dominioTipoUsuario, 'tipoUsuario');
-  await controllerDominio.cadastrarLocalmente(dominioTipoPedido,'tipoPedido');
-  await controllerDominio.cadastrarLocalmente(dominioStatusPagamento,'statusPagamento');
-  await controllerDominio.cadastrarLocalmente(dominioMetodoPagamento,'metodoPagamento');
   
+  if (!isOnline) {
+    console.log('[Main] Sem conexão com internet. Sincronização ignorada.');
+    return;
+  }
 
-  // ===== CATEGORIAS =====
-
-
-  await controllerCategorias.cadastrarLocalmente(categorias);
-
-
-  // ===== PRODUTOS =====
-
-  await controllerProdutos.cadastrarLocalmente(produtos);
-
-
-  // ===== USUARIOS =====
-
-  await controllerUsuarios.cadastrarLocalmente(usuarios);
+  console.log('[Main] Aplicativo online. Iniciando sincronização automática...');
   
+  try {
+    // Buscar dados da API
+    const dominioStatusPedido = await APIFetch.sincronizarDados('dominioStatusPedido');
+    const dominioTipoUsuario = await APIFetch.sincronizarDados('dominioTipoUsuario');
+    const dominioTipoPedido = await APIFetch.sincronizarDados('dominioTipoPedido');
+    const dominioStatusPagamento = await APIFetch.sincronizarDados('dominioStatusPagamento');
+    const dominioMetodoPagamento = await APIFetch.sincronizarDados('dominioMetodoPagamento');
+    const categorias = await APIFetch.sincronizarDados('categorias');
+    const produtos = await APIFetch.sincronizarDados('produtos');
+    const usuarios = await APIFetch.sincronizarDados('usuarios');
+    const pedidos = await APIFetch.sincronizarDados('pedidos');
+    const enderecos = await APIFetch.sincronizarDados('enderecos');
 
-  // ===== PEDIDOS =====
+    //===== DOMINIOS =====
+    await controllerDominio.cadastrarLocalmente(dominioStatusPedido, 'statusPedido');
+    await controllerDominio.cadastrarLocalmente(dominioTipoUsuario, 'tipoUsuario');
+    await controllerDominio.cadastrarLocalmente(dominioTipoPedido, 'tipoPedido');
+    await controllerDominio.cadastrarLocalmente(dominioStatusPagamento, 'statusPagamento');
+    await controllerDominio.cadastrarLocalmente(dominioMetodoPagamento, 'metodoPagamento');
 
-  await controllerPedidos.cadastrarLocalmente(pedidos);
+    // ===== CATEGORIAS =====
+    await controllerCategorias.cadastrarLocalmente(categorias);
 
+    // ===== PRODUTOS =====
+    await controllerProdutos.cadastrarLocalmente(produtos);
 
-  // ===== ENDERECOS =====
+    // ===== USUARIOS =====
+    await controllerUsuarios.cadastrarLocalmente(usuarios);
 
-  await controllerEnderecos.cadastrarLocalmente(enderecos);
+    // ===== PEDIDOS =====
+    await controllerPedidos.cadastrarLocalmente(pedidos);
 
-}
+    // ===== ENDERECOS =====
+    await controllerEnderecos.cadastrarLocalmente(enderecos);
+
+    console.log('[Main] Sincronização concluída com sucesso!');
+  } catch (error) {
+    console.error('[Main] Erro durante sincronização:', error.message);
+  }
 }
 
 sincronizarSeOnline();

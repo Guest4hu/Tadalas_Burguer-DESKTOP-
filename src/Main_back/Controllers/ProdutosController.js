@@ -11,7 +11,19 @@ class ProdutoController {
     }
 
     async cadastrarLocalmente(produto) {
-        for (const element of produto.dados) {
+        // Validação de segurança
+        if (!produto || !produto.sucess || !produto.dados?.dados) {
+            console.warn('[Produtos] Dados inválidos:', produto?.message || 'sem resposta');
+            return;
+        }
+
+        const itens = produto.dados.dados;
+        if (!Array.isArray(itens) || itens.length === 0) {
+            console.warn('[Produtos] Nenhum produto para cadastrar');
+            return;
+        }
+
+        for (const element of itens) {
             if (await this.model.buscarPorID(element.produto_id) === true) {
                 console.log(`Produto com ID do produto: ${element.produto_id} já existe. Atualizando...`);
                 await this.model.atualizar(element);

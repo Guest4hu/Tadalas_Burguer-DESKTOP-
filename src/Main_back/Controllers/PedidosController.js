@@ -83,7 +83,19 @@ class PedidoController {
 
 
     async cadastrarLocalmente(pedido) {
-        for (const element of pedido.dados) {
+        // Validação de segurança
+        if (!pedido || !pedido.sucess || !pedido.dados?.dados) {
+            console.warn('[Pedidos] Dados inválidos:', pedido?.message || 'sem resposta');
+            return;
+        }
+
+        const itens = pedido.dados.dados;
+        if (!Array.isArray(itens) || itens.length === 0) {
+            console.warn('[Pedidos] Nenhum pedido para cadastrar');
+            return;
+        }
+
+        for (const element of itens) {
             if (await this.model.buscarPorID(element.pedido_id) === true) {
                 console.log(`Pedido com ID ${element.pedido_id} já existe. Atualizando...`);
                 await this.model.atualizar(element);

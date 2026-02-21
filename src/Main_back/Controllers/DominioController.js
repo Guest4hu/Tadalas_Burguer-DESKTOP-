@@ -28,9 +28,20 @@ class DominioController {
     // CADASTRAR
     // =============================
 
-    async cadastrarLocalmente(dados ,tipo) {
+    async cadastrarLocalmente(dados, tipo) {
+        // Validação de segurança
+        if (!dados || !dados.sucess || !dados.dados?.dados) {
+            console.warn(`[Dominio] Dados inválidos para ${tipo}:`, dados?.message || 'sem resposta');
+            return;
+        }
 
-        for (const element of dados.dados) {
+        const itens = dados.dados.dados;
+        if (!Array.isArray(itens) || itens.length === 0) {
+            console.warn(`[Dominio] Nenhum item para cadastrar em ${tipo}`);
+            return;
+        }
+
+        for (const element of itens) {
             if (await this.model.buscarPorId(tipo, element.id)) {
                 console.log(`Domínio ${tipo} com ID ${element.id} já existe. atualizando...`);
                 await this.model.atualizar(tipo, element.id, element.descricao);

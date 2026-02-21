@@ -11,7 +11,19 @@ class UsuarioController {
     }
 
     async cadastrarLocalmente(usuario) {
-       for (const element of usuario.dados) {
+        // Validação de segurança
+        if (!usuario || !usuario.sucess || !usuario.dados?.dados) {
+            console.warn('[Usuarios] Dados inválidos:', usuario?.message || 'sem resposta');
+            return;
+        }
+
+        const itens = usuario.dados.dados;
+        if (!Array.isArray(itens) || itens.length === 0) {
+            console.warn('[Usuarios] Nenhum usuário para cadastrar');
+            return;
+        }
+
+        for (const element of itens) {
             if (await this.model.buscarPorID(element.usuario_id) === true) {
                 console.log(`Usuário com ID ${element.usuario_id} já existe. Atualizando...`);
                 await this.model.atualizar(element);
