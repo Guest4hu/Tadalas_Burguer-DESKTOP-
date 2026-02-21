@@ -4,7 +4,7 @@ Sistema de Ponto de Venda (PDV) desktop para hamburgueria artesanal, desenvolvid
 
 
 
-Tadala Burguer
+Tadala Burguer Desktop
 Version 1.0
 
 ---
