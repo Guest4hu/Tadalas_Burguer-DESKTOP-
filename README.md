@@ -17,6 +17,7 @@ Version 1.0
 - [Arquitetura](#-arquitetura)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Banco de Dados](#-banco-de-dados)
+- [Usuários de Teste](#-usuários-de-teste)
 - [Instalação e Configuração](#-instalação-e-configuração)
 - [Scripts Disponíveis](#-scripts-disponíveis)
 - [API e Sincronização](#-api-e-sincronização)
@@ -339,6 +340,24 @@ Todas as tabelas incluem campos para controle de sincronização:
 - `atualizado_em` - Data da última atualização
 - `excluido_em` - Soft delete (exclusão lógica)
 - `sincronizado_em` - Flag de sincronização (0 = pendente, 1 = sincronizado)
+
+---
+
+## 🧪 Usuários de Teste
+
+O banco de dados já vem com usuários pré-cadastrados para facilitar os testes:
+
+| Tipo | Nome | Email | Senha |
+|------|------|-------|-------|
+| 👑 **Administrador** | Admin | `testeAdmin@gmail.com` | `testeAdmin@gmail.com` |
+| 👷 **Funcionário** | Funcionario | `testefuncionario@gmail.com` | `testefuncionario@gmail.com` |
+| 👤 **Cliente** | cliente | `testecliente@gmail.com` | `testecliente@gmail.com` |
+
+### Permissões por Tipo de Usuário
+
+- **Administrador:** Acesso total ao painel administrativo, gestão de funcionários, relatórios financeiros e configurações do sistema.
+- **Funcionário:** Acesso ao PDV, gestão de pedidos, visualização de cardápio e atualização de status de pedidos.
+- **Cliente:** Acesso ao cardápio, carrinho de compras, histórico de pedidos e perfil pessoal.
 
 ---
 
