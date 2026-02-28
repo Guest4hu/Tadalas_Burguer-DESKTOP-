@@ -2,15 +2,52 @@
 
 Sistema de Ponto de Venda (PDV) desktop para hamburgueria artesanal, desenvolvido com **Electron**, **Vite** e **SQLite**.
 
+<div align="center">
 
+![Version](https://img.shields.io/badge/version-1.0.0-orange)
+![Electron](https://img.shields.io/badge/Electron-39.2.4-47848F?logo=electron)
+![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?logo=vite)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![License](https://img.shields.io/badge/license-Proprietary-red)
 
-Tadala Burguer Desktop
-Version 1.0
+</div>
+
+---
+
+## 🌐 Ecossistema Tadalas Burguer
+
+Este aplicativo desktop faz parte de um **ecossistema completo** de gestão para hamburguerias:
+
+| Componente | Descrição | Tecnologias |
+|------------|-----------|-------------|
+| 🖥️ **Backend Web** | API RESTful + Dashboard Admin | PHP 8.1+, MySQL, MVC |
+| 📱 **Cardápio Digital** | Interface mobile-first para clientes | JavaScript ES6+, CSS3 |
+| 💻 **Desktop PDV** | Ponto de Venda offline-first (este projeto) | Electron, Vite, SQLite |
+
+### ✨ Funcionalidades do Ecossistema
+
+- ✅ **PDV (Ponto de Venda)** em tempo real
+- ✅ **Dashboard** com Business Intelligence e KPIs
+- ✅ **Gestão financeira** completa
+- ✅ **Cardápio digital** mobile-first
+- ✅ **Sistema de delivery** com múltiplas formas de pagamento
+- ✅ **Sincronização automática** entre dispositivos
+
+### 🛠️ Stack Completa
+
+| Camada | Tecnologias |
+|--------|-------------|
+| **Backend** | PHP 8.1+ com arquitetura MVC customizada |
+| **Frontend Web** | JavaScript ES6+, CSS3 moderno |
+| **Desktop** | Electron, Vite, better-sqlite3 |
+| **Database** | MySQL (Web) + SQLite (Desktop) |
+| **Extras** | Chart.js, PHPMailer, SweetAlert2, bcryptjs |
 
 ---
 
 ## 📋 Índice
 
+- [Ecossistema Tadalas Burguer](#-ecossistema-tadalas-burguer)
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades](#-funcionalidades)
 - [Tecnologias Utilizadas](#-tecnologias-utilizadas)
@@ -22,6 +59,7 @@ Version 1.0
 - [Scripts Disponíveis](#-scripts-disponíveis)
 - [API e Sincronização](#-api-e-sincronização)
 - [Segurança](#-segurança)
+- [Contribuição](#-contribuição)
 
 ---
 
@@ -500,11 +538,43 @@ webPreferences: {
 
 ## 📄 Licença
 
-Este projeto é proprietário e de uso exclusivo do Tadalas Burguer.
+Este projeto é **open source** e está disponível para a comunidade.
 
 ---
 
+## 👥 Contribuição
 
+Contribuições são bem-vindas! Este é um projeto **open source** 🚀
+
+### Como Contribuir
+
+1. Faça um **fork** do repositório
+2. Crie uma branch para sua feature:
+   ```bash
+   git checkout -b feature/nova-funcionalidade
+   ```
+3. Commit suas mudanças:
+   ```bash
+   git commit -m 'feat: adiciona nova funcionalidade'
+   ```
+4. Push para a branch:
+   ```bash
+   git push origin feature/nova-funcionalidade
+   ```
+5. Abra um **Pull Request**
+
+### Padrão de Commits
+
+| Tipo | Descrição |
+|------|----------|
+| `feat` | Nova funcionalidade |
+| `fix` | Correção de bug |
+| `docs` | Documentação |
+| `style` | Formatação |
+| `refactor` | Refatoração de código |
+| `test` | Testes |
+
+---
 
 ## 📞 Suporte
 
@@ -512,4 +582,21 @@ Para suporte técnico ou dúvidas sobre o sistema, entre em contato com a equipe
 
 ---
 
+## 💡 Aprendizados do Projeto
+
+- Implementação de arquitetura MVC do zero
+- Gestão de permissões por tipo de usuário
+- Desenvolvimento de APIs RESTful
+- UX focada em conversão
+- Sincronização offline-first com SQLite
+- Comunicação IPC segura no Electron
+
+---
+
+<div align="center">
+
 **Desenvolvido com ❤️ para Tadalas Burguer**
+
+`#PHP` `#Electron` `#WebDevelopment` `#FullStack` `#MVC` `#MySQL` `#SQLite` `#JavaScript` `#OpenSource` `#Developer`
+
+</div>
